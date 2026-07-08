@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Mario - 6 Fases + Power-ups</title>
+    <title>Super Mario - 10 Fases com Koopalings</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,6 @@
             font-family: 'Courier New', monospace;
         }
 
-        /* ===== TELA DE LOGIN / CADASTRO ===== */
         #loginScreen {
             position: fixed;
             top: 0;
@@ -125,7 +124,6 @@
             border-radius: 10px;
         }
 
-        /* Tabs */
         .tab-container {
             display: flex;
             gap: 6px;
@@ -326,7 +324,6 @@
             text-decoration: underline;
         }
 
-        /* ===== JOGO ===== */
         #gameContainer.hidden {
             display: none;
         }
@@ -471,6 +468,22 @@
             text-shadow: 1px 1px 0 #7a1a1a;
         }
 
+        .level-badge.hard {
+            background: #8e24aa;
+            box-shadow: 0 0 20px rgba(142, 36, 170, 0.5);
+        }
+
+        .level-badge.boss {
+            background: #d32f2f;
+            box-shadow: 0 0 30px rgba(211, 47, 47, 0.7);
+            animation: bossGlow 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes bossGlow {
+            from { box-shadow: 0 0 20px rgba(211, 47, 47, 0.5); }
+            to { box-shadow: 0 0 40px rgba(211, 47, 47, 0.9); }
+        }
+
         .char-select {
             display: flex;
             gap: 6px;
@@ -538,6 +551,13 @@
             cursor: pointer;
         }
 
+        .boss-name {
+            color: #ff6b6b;
+            font-weight: bold;
+            font-size: 0.9rem;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
         @media (max-width: 860px) {
             canvas {
                 width: 100%;
@@ -574,37 +594,26 @@
 </head>
 <body>
 
-    <!-- ===== TELA DE LOGIN / CADASTRO ===== -->
     <div id="loginScreen">
         <div class="login-box">
             <span class="mario-icon">⭐</span>
             <h1>SUPER MARIO</h1>
             <div class="subtitle">
-                <span>6 fases</span> · <span>3 personagens</span> · <span>power-ups</span>
+                <span>10 fases</span> · <span>3 personagens</span> · <span>power-ups</span>
             </div>
 
-            <!-- Tabs -->
             <div class="tab-container">
                 <button class="tab-btn active" data-tab="login">🔐 Login</button>
                 <button class="tab-btn" data-tab="register">📝 Cadastrar</button>
             </div>
 
-            <!-- Tab Login -->
             <div class="tab-content active" id="tabLogin">
                 <form id="loginForm" autocomplete="off">
                     <label for="loginUsername">
                         <span class="label-icon">👤</span> Nome de usuário
                     </label>
                     <div class="input-group">
-                        <input
-                            type="text"
-                            id="loginUsername"
-                            placeholder="Digite seu nome..."
-                            required
-                            minlength="2"
-                            maxlength="20"
-                            autofocus
-                        >
+                        <input type="text" id="loginUsername" placeholder="Digite seu nome..." required minlength="2" maxlength="20">
                         <span class="input-icon">✏️</span>
                     </div>
 
@@ -612,20 +621,11 @@
                         <span class="label-icon">🔒</span> Senha
                     </label>
                     <div class="input-group">
-                        <input
-                            type="password"
-                            id="loginPassword"
-                            placeholder="Digite sua senha"
-                            required
-                            minlength="3"
-                        >
+                        <input type="password" id="loginPassword" placeholder="Digite sua senha" required minlength="3">
                         <span class="input-icon">🔑</span>
                     </div>
 
-                    <button type="submit" class="login-btn" id="loginBtn">
-                        ▶ Entrar no Jogo
-                    </button>
-
+                    <button type="submit" class="login-btn" id="loginBtn">▶ Entrar no Jogo</button>
                     <div class="error-msg" id="loginError"></div>
                 </form>
                 <div class="switch-text">
@@ -633,21 +633,13 @@
                 </div>
             </div>
 
-            <!-- Tab Cadastro -->
             <div class="tab-content" id="tabRegister">
                 <form id="registerForm" autocomplete="off">
                     <label for="registerUsername">
                         <span class="label-icon">👤</span> Nome de usuário
                     </label>
                     <div class="input-group">
-                        <input
-                            type="text"
-                            id="registerUsername"
-                            placeholder="Escolha um nome..."
-                            required
-                            minlength="2"
-                            maxlength="20"
-                        >
+                        <input type="text" id="registerUsername" placeholder="Escolha um nome..." required minlength="2" maxlength="20">
                         <span class="input-icon">✏️</span>
                     </div>
 
@@ -655,13 +647,7 @@
                         <span class="label-icon">🔒</span> Senha
                     </label>
                     <div class="input-group">
-                        <input
-                            type="password"
-                            id="registerPassword"
-                            placeholder="Crie uma senha (mínimo 3 caracteres)"
-                            required
-                            minlength="3"
-                        >
+                        <input type="password" id="registerPassword" placeholder="Crie uma senha (mínimo 3 caracteres)" required minlength="3">
                         <span class="input-icon">🔑</span>
                     </div>
 
@@ -669,20 +655,11 @@
                         <span class="label-icon">✅</span> Confirmar senha
                     </label>
                     <div class="input-group">
-                        <input
-                            type="password"
-                            id="registerConfirmPassword"
-                            placeholder="Digite a senha novamente"
-                            required
-                            minlength="3"
-                        >
+                        <input type="password" id="registerConfirmPassword" placeholder="Digite a senha novamente" required minlength="3">
                         <span class="input-icon">🔐</span>
                     </div>
 
-                    <button type="submit" class="login-btn" id="registerBtn">
-                        📝 Criar Conta
-                    </button>
-
+                    <button type="submit" class="login-btn" id="registerBtn">📝 Criar Conta</button>
                     <div id="registerMessage"></div>
                 </form>
                 <div class="switch-text">
@@ -698,7 +675,6 @@
         </div>
     </div>
 
-    <!-- ===== JOGO ===== -->
     <div id="gameContainer" class="hidden">
         <div class="game-wrapper">
             <canvas id="gameCanvas" width="800" height="400"></canvas>
@@ -706,7 +682,7 @@
                 <div>
                     <span>🪙 <span id="coinDisplay">0</span></span>
                     <span style="margin-left: 10px;">🏆 <span id="scoreDisplay">0</span></span>
-                    <span style="margin-left: 10px;" class="level-badge">Fase <span id="levelDisplay">1</span>/6</span>
+                    <span style="margin-left: 10px;" class="level-badge" id="levelBadge">Fase <span id="levelDisplay">1</span>/10</span>
                     <span class="power-badge" id="powerBadge">⭐ POWER-UP</span>
                     <span class="user-tag" id="userTag">
                         👤 <span id="usernameDisplay">Jogador</span>
@@ -733,607 +709,1428 @@
     </div>
 
     <script>
-        (function() {
-            // ============================================================
-            //  SISTEMA DE LOGIN E CADASTRO COM localStorage
-            // ============================================================
-            const loginScreen = document.getElementById('loginScreen');
-            const gameContainer = document.getElementById('gameContainer');
-            const usernameDisplay = document.getElementById('usernameDisplay');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const powerBadge = document.getElementById('powerBadge');
+        // ============================================================
+        // SISTEMA DE LOGIN E CADASTRO COM localStorage
+        // ============================================================
+        const loginScreen = document.getElementById('loginScreen');
+        const gameContainer = document.getElementById('gameContainer');
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        const logoutBtn = document.getElementById('logoutBtn');
 
-            // Tabs
-            const tabBtns = document.querySelectorAll('.tab-btn');
-            const tabContents = {
-                login: document.getElementById('tabLogin'),
-                register: document.getElementById('tabRegister')
-            };
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = {
+            login: document.getElementById('tabLogin'),
+            register: document.getElementById('tabRegister')
+        };
 
-            // Forms
-            const loginForm = document.getElementById('loginForm');
-            const loginUsername = document.getElementById('loginUsername');
-            const loginPassword = document.getElementById('loginPassword');
-            const loginError = document.getElementById('loginError');
-            const loginBtn = document.getElementById('loginBtn');
+        const loginForm = document.getElementById('loginForm');
+        const loginUsername = document.getElementById('loginUsername');
+        const loginPassword = document.getElementById('loginPassword');
+        const loginError = document.getElementById('loginError');
+        const loginBtn = document.getElementById('loginBtn');
 
-            const registerForm = document.getElementById('registerForm');
-            const registerUsername = document.getElementById('registerUsername');
-            const registerPassword = document.getElementById('registerPassword');
-            const registerConfirmPassword = document.getElementById('registerConfirmPassword');
-            const registerMessage = document.getElementById('registerMessage');
-            const registerBtn = document.getElementById('registerBtn');
+        const registerForm = document.getElementById('registerForm');
+        const registerUsername = document.getElementById('registerUsername');
+        const registerPassword = document.getElementById('registerPassword');
+        const registerConfirmPassword = document.getElementById('registerConfirmPassword');
+        const registerMessage = document.getElementById('registerMessage');
+        const registerBtn = document.getElementById('registerBtn');
 
-            // Switches
-            const switchToRegister = document.getElementById('switchToRegister');
-            const switchToLogin = document.getElementById('switchToLogin');
+        const switchToRegister = document.getElementById('switchToRegister');
+        const switchToLogin = document.getElementById('switchToLogin');
 
-            let currentUser = null;
+        let currentUser = null;
 
-            // --- Gerenciamento de usuários no localStorage ---
-            function getUsers() {
-                try {
-                    return JSON.parse(localStorage.getItem('marioUsers')) || {};
-                } catch {
-                    return {};
-                }
+        function getUsers() {
+            try {
+                return JSON.parse(localStorage.getItem('marioUsers')) || {};
+            } catch {
+                return {};
             }
+        }
 
-            function saveUsers(users) {
-                localStorage.setItem('marioUsers', JSON.stringify(users));
-            }
+        function saveUsers(users) {
+            localStorage.setItem('marioUsers', JSON.stringify(users));
+        }
 
-            function userExists(username) {
-                const users = getUsers();
-                return users[username.toLowerCase()] !== undefined;
-            }
+        function userExists(username) {
+            const users = getUsers();
+            return users[username.toLowerCase()] !== undefined;
+        }
 
-            function validateUser(username, password) {
-                const users = getUsers();
-                const key = username.toLowerCase();
-                if (users[key] && users[key] === password) {
-                    return true;
-                }
-                return false;
-            }
+        function validateUser(username, password) {
+            const users = getUsers();
+            const key = username.toLowerCase();
+            return users[key] && users[key] === password;
+        }
 
-            function registerUser(username, password) {
-                const users = getUsers();
-                const key = username.toLowerCase();
-                if (users[key]) {
-                    return false; // Usuário já existe
-                }
-                users[key] = password;
-                saveUsers(users);
-                return true;
-            }
+        function registerUser(username, password) {
+            const users = getUsers();
+            const key = username.toLowerCase();
+            if (users[key]) return false;
+            users[key] = password;
+            saveUsers(users);
+            return true;
+        }
 
-            // --- Tabs ---
-            tabBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    tabBtns.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    const tab = this.dataset.tab;
-                    Object.keys(tabContents).forEach(key => {
-                        tabContents[key].classList.toggle('active', key === tab);
-                    });
-                    // Limpa mensagens
-                    loginError.textContent = '';
-                    registerMessage.innerHTML = '';
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const tab = this.dataset.tab;
+                Object.keys(tabContents).forEach(key => {
+                    tabContents[key].classList.toggle('active', key === tab);
                 });
-            });
-
-            // --- Switches entre tabs ---
-            switchToRegister.addEventListener('click', function(e) {
-                e.preventDefault();
-                tabBtns.forEach(b => b.classList.remove('active'));
-                document.querySelector('.tab-btn[data-tab="register"]').classList.add('active');
-                tabContents.login.classList.remove('active');
-                tabContents.register.classList.add('active');
                 loginError.textContent = '';
                 registerMessage.innerHTML = '';
-                setTimeout(() => registerUsername.focus(), 100);
             });
+        });
 
-            switchToLogin.addEventListener('click', function(e) {
-                e.preventDefault();
-                tabBtns.forEach(b => b.classList.remove('active'));
-                document.querySelector('.tab-btn[data-tab="login"]').classList.add('active');
-                tabContents.register.classList.remove('active');
-                tabContents.login.classList.add('active');
-                loginError.textContent = '';
-                registerMessage.innerHTML = '';
-                setTimeout(() => loginUsername.focus(), 100);
-            });
+        switchToRegister.addEventListener('click', function(e) {
+            e.preventDefault();
+            tabBtns.forEach(b => b.classList.remove('active'));
+            document.querySelector('.tab-btn[data-tab="register"]').classList.add('active');
+            tabContents.login.classList.remove('active');
+            tabContents.register.classList.add('active');
+            loginError.textContent = '';
+            registerMessage.innerHTML = '';
+            setTimeout(() => registerUsername.focus(), 100);
+        });
 
-            // --- Login ---
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = loginUsername.value.trim();
-                const password = loginPassword.value.trim();
+        switchToLogin.addEventListener('click', function(e) {
+            e.preventDefault();
+            tabBtns.forEach(b => b.classList.remove('active'));
+            document.querySelector('.tab-btn[data-tab="login"]').classList.add('active');
+            tabContents.register.classList.remove('active');
+            tabContents.login.classList.add('active');
+            loginError.textContent = '';
+            registerMessage.innerHTML = '';
+            setTimeout(() => loginUsername.focus(), 100);
+        });
 
-                loginError.textContent = '';
-                loginBtn.disabled = true;
-                loginBtn.textContent = '⏳ Entrando...';
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = loginUsername.value.trim();
+            const password = loginPassword.value.trim();
 
-                setTimeout(() => {
-                    if (!username || username.length < 2) {
-                        loginError.textContent = '⚠️ Nome deve ter pelo menos 2 caracteres.';
-                        loginBtn.disabled = false;
-                        loginBtn.textContent = '▶ Entrar no Jogo';
-                        return;
-                    }
-                    if (!password || password.length < 3) {
-                        loginError.textContent = '⚠️ Senha deve ter pelo menos 3 caracteres.';
-                        loginBtn.disabled = false;
-                        loginBtn.textContent = '▶ Entrar no Jogo';
-                        return;
-                    }
+            loginError.textContent = '';
+            loginBtn.disabled = true;
+            loginBtn.textContent = '⏳ Entrando...';
 
-                    if (!validateUser(username, password)) {
-                        loginError.textContent = '❌ Usuário ou senha incorretos.';
-                        loginBtn.disabled = false;
-                        loginBtn.textContent = '▶ Entrar no Jogo';
-                        return;
-                    }
-
-                    // Login bem-sucedido
-                    currentUser = username;
-                    usernameDisplay.textContent = username;
-                    loginScreen.classList.add('hidden');
-                    gameContainer.classList.remove('hidden');
-
-                    if (typeof initGame === 'function') {
-                        initGame();
-                    }
-
+            setTimeout(() => {
+                if (!username || username.length < 2) {
+                    loginError.textContent = '⚠️ Nome deve ter pelo menos 2 caracteres.';
                     loginBtn.disabled = false;
                     loginBtn.textContent = '▶ Entrar no Jogo';
-                    loginError.textContent = '';
-                }, 400);
-            });
-
-            // --- Cadastro ---
-            registerForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const username = registerUsername.value.trim();
-                const password = registerPassword.value.trim();
-                const confirmPassword = registerConfirmPassword.value.trim();
-
-                registerMessage.innerHTML = '';
-                registerBtn.disabled = true;
-                registerBtn.textContent = '⏳ Cadastrando...';
-
-                setTimeout(() => {
-                    if (!username || username.length < 2) {
-                        registerMessage.innerHTML = '<div class="error-msg">⚠️ Nome deve ter pelo menos 2 caracteres.</div>';
-                        registerBtn.disabled = false;
-                        registerBtn.textContent = '📝 Criar Conta';
-                        return;
-                    }
-                    if (!password || password.length < 3) {
-                        registerMessage.innerHTML = '<div class="error-msg">⚠️ Senha deve ter pelo menos 3 caracteres.</div>';
-                        registerBtn.disabled = false;
-                        registerBtn.textContent = '📝 Criar Conta';
-                        return;
-                    }
-                    if (password !== confirmPassword) {
-                        registerMessage.innerHTML = '<div class="error-msg">⚠️ As senhas não coincidem.</div>';
-                        registerBtn.disabled = false;
-                        registerBtn.textContent = '📝 Criar Conta';
-                        return;
-                    }
-
-                    if (userExists(username)) {
-                        registerMessage.innerHTML = '<div class="error-msg">❌ Este usuário já existe. Tente outro nome.</div>';
-                        registerBtn.disabled = false;
-                        registerBtn.textContent = '📝 Criar Conta';
-                        return;
-                    }
-
-                    if (registerUser(username, password)) {
-                        registerMessage.innerHTML = '<div class="success-msg">✅ Conta criada com sucesso! Faça login agora.</div>';
-                        registerForm.reset();
-                        registerBtn.disabled = false;
-                        registerBtn.textContent = '📝 Criar Conta';
-
-                        // Muda para a tab de login após 1s
-                        setTimeout(() => {
-                            tabBtns.forEach(b => b.classList.remove('active'));
-                            document.querySelector('.tab-btn[data-tab="login"]').classList.add('active');
-                            tabContents.register.classList.remove('active');
-                            tabContents.login.classList.add('active');
-                            loginUsername.value = username;
-                            loginPassword.value = '';
-                            loginError.textContent = '';
-                            registerMessage.innerHTML = '';
-                            setTimeout(() => loginPassword.focus(), 100);
-                        }, 1200);
-                    } else {
-                        registerMessage.innerHTML = '<div class="error-msg">❌ Erro ao criar conta. Tente novamente.</div>';
-                        registerBtn.disabled = false;
-                        registerBtn.textContent = '📝 Criar Conta';
-                    }
-                }, 400);
-            });
-
-            // --- Logout ---
-            function handleLogout() {
-                if (confirm('Deseja realmente sair do jogo?')) {
-                    currentUser = null;
-                    gameContainer.classList.add('hidden');
-                    loginScreen.classList.remove('hidden');
-                    loginUsername.value = '';
-                    loginPassword.value = '';
-                    loginError.textContent = '';
-                    if (audio && isAudioPlaying) {
-                        audio.pause();
-                        isAudioPlaying = false;
-                        if (playBtn) playBtn.textContent = '▶️';
-                    }
-                    setTimeout(() => loginUsername.focus(), 100);
+                    return;
                 }
-            }
+                if (!password || password.length < 3) {
+                    loginError.textContent = '⚠️ Senha deve ter pelo menos 3 caracteres.';
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = '▶ Entrar no Jogo';
+                    return;
+                }
 
-            logoutBtn.addEventListener('click', handleLogout);
+                if (!validateUser(username, password)) {
+                    loginError.textContent = '❌ Usuário ou senha incorretos.';
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = '▶ Entrar no Jogo';
+                    return;
+                }
 
-            // Enter no login
-            loginPassword.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') loginForm.dispatchEvent(new Event('submit'));
-            });
+                currentUser = username;
+                usernameDisplay.textContent = username;
+                loginScreen.classList.add('hidden');
+                gameContainer.classList.remove('hidden');
+                initGame();
 
-            // Enter no cadastro
-            registerConfirmPassword.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') registerForm.dispatchEvent(new Event('submit'));
-            });
+                loginBtn.disabled = false;
+                loginBtn.textContent = '▶ Entrar no Jogo';
+                loginError.textContent = '';
+            }, 400);
+        });
 
-            // Foco no campo de login ao carregar
-            window.addEventListener('load', () => {
-                setTimeout(() => loginUsername.focus(), 300);
-            });
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = registerUsername.value.trim();
+            const password = registerPassword.value.trim();
+            const confirmPassword = registerConfirmPassword.value.trim();
 
-            // ============================================================
-            //  JOGO (com power-ups)
-            // ============================================================
-            const canvas = document.getElementById('gameCanvas');
-            const ctx = canvas.getContext('2d');
-            const coinSpan = document.getElementById('coinDisplay');
-            const scoreSpan = document.getElementById('scoreDisplay');
-            const levelSpan = document.getElementById('levelDisplay');
+            registerMessage.innerHTML = '';
+            registerBtn.disabled = true;
+            registerBtn.textContent = '⏳ Cadastrando...';
 
-            const GROUND_Y = 340;
-            const GRAVITY = 0.55;
-            const MAX_LEVEL = 6;
+            setTimeout(() => {
+                if (!username || username.length < 2) {
+                    registerMessage.innerHTML = '<div class="error-msg">⚠️ Nome deve ter pelo menos 2 caracteres.</div>';
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = '📝 Criar Conta';
+                    return;
+                }
+                if (!password || password.length < 3) {
+                    registerMessage.innerHTML = '<div class="error-msg">⚠️ Senha deve ter pelo menos 3 caracteres.</div>';
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = '📝 Criar Conta';
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    registerMessage.innerHTML = '<div class="error-msg">⚠️ As senhas não coincidem.</div>';
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = '📝 Criar Conta';
+                    return;
+                }
 
-            // --- Áudio ---
-            const audio = new Audio('soundtrack.mp3');
-            audio.loop = true;
-            audio.volume = 0.7;
-            let isAudioPlaying = false;
-            
-            const playBtn = document.getElementById('playBtn');
-            const stopBtn = document.getElementById('stopBtn');
-            const volumeSlider = document.getElementById('volumeSlider');
-            
-            playBtn.addEventListener('click', function() {
-                if (isAudioPlaying) {
+                if (userExists(username)) {
+                    registerMessage.innerHTML = '<div class="error-msg">❌ Este usuário já existe. Tente outro nome.</div>';
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = '📝 Criar Conta';
+                    return;
+                }
+
+                if (registerUser(username, password)) {
+                    registerMessage.innerHTML = '<div class="success-msg">✅ Conta criada com sucesso! Faça login agora.</div>';
+                    registerForm.reset();
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = '📝 Criar Conta';
+
+                    setTimeout(() => {
+                        tabBtns.forEach(b => b.classList.remove('active'));
+                        document.querySelector('.tab-btn[data-tab="login"]').classList.add('active');
+                        tabContents.register.classList.remove('active');
+                        tabContents.login.classList.add('active');
+                        loginUsername.value = username;
+                        loginPassword.value = '';
+                        loginError.textContent = '';
+                        registerMessage.innerHTML = '';
+                        setTimeout(() => loginPassword.focus(), 100);
+                    }, 1200);
+                } else {
+                    registerMessage.innerHTML = '<div class="error-msg">❌ Erro ao criar conta. Tente novamente.</div>';
+                    registerBtn.disabled = false;
+                    registerBtn.textContent = '📝 Criar Conta';
+                }
+            }, 400);
+        });
+
+        logoutBtn.addEventListener('click', function() {
+            if (confirm('Deseja realmente sair do jogo?')) {
+                currentUser = null;
+                gameContainer.classList.add('hidden');
+                loginScreen.classList.remove('hidden');
+                loginUsername.value = '';
+                loginPassword.value = '';
+                loginError.textContent = '';
+                if (audio && isAudioPlaying) {
                     audio.pause();
                     isAudioPlaying = false;
-                    playBtn.textContent = '▶️';
-                } else {
-                    audio.play().catch(e => {
-                        console.warn('Não foi possível reproduzir o áudio:', e);
-                    });
-                    isAudioPlaying = true;
-                    playBtn.textContent = '⏸️';
+                    if (playBtn) playBtn.textContent = '▶️';
                 }
-            });
-            
-            stopBtn.addEventListener('click', function() {
+                setTimeout(() => loginUsername.focus(), 100);
+            }
+        });
+
+        loginPassword.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') loginForm.dispatchEvent(new Event('submit'));
+        });
+
+        registerConfirmPassword.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') registerForm.dispatchEvent(new Event('submit'));
+        });
+
+        window.addEventListener('load', () => {
+            setTimeout(() => loginUsername.focus(), 300);
+        });
+
+        // ============================================================
+        // JOGO - 10 FASES COM BOSSES ESPECÍFICOS
+        // ============================================================
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const coinSpan = document.getElementById('coinDisplay');
+        const scoreSpan = document.getElementById('scoreDisplay');
+        const levelSpan = document.getElementById('levelDisplay');
+        const levelBadge = document.getElementById('levelBadge');
+        const powerBadge = document.getElementById('powerBadge');
+
+        const GROUND_Y = 340;
+        const GRAVITY = 0.55;
+        const MAX_LEVEL = 10;
+
+        // Áudio
+        const audio = new Audio('soundtrack.mp3');
+        audio.loop = true;
+        audio.volume = 0.7;
+        let isAudioPlaying = false;
+        
+        const playBtn = document.getElementById('playBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const volumeSlider = document.getElementById('volumeSlider');
+        
+        playBtn.addEventListener('click', function() {
+            if (isAudioPlaying) {
                 audio.pause();
-                audio.currentTime = 0;
                 isAudioPlaying = false;
                 playBtn.textContent = '▶️';
-            });
-            
-            volumeSlider.addEventListener('input', function() {
-                audio.volume = this.value / 100;
-            });
-            
-            audio.addEventListener('ended', function() {
-                isAudioPlaying = false;
-                playBtn.textContent = '▶️';
-            });
-
-            function tryAutoPlay() {
-                audio.play().then(() => {
-                    isAudioPlaying = true;
-                    playBtn.textContent = '⏸️';
-                }).catch(() => {
-                    console.log('Autoplay bloqueado. Clique em ▶️ para tocar a música.');
-                });
+            } else {
+                audio.play().catch(e => console.warn('Não foi possível reproduzir o áudio:', e));
+                isAudioPlaying = true;
+                playBtn.textContent = '⏸️';
             }
+        });
+        
+        stopBtn.addEventListener('click', function() {
+            audio.pause();
+            audio.currentTime = 0;
+            isAudioPlaying = false;
+            playBtn.textContent = '▶️';
+        });
+        
+        volumeSlider.addEventListener('input', function() {
+            audio.volume = this.value / 100;
+        });
 
-            // --- Carregar imagens ---
-            const backgroundImg = new Image();
-            backgroundImg.src = 'fundo.png';
-            let backgroundLoaded = false;
-            
-            backgroundImg.onload = function() {
-                backgroundLoaded = true;
-                console.log('✅ Imagem de fundo carregada!');
-            };
-            
-            backgroundImg.onerror = function() {
-                console.warn('⚠️ Não foi possível carregar fundo.png. Usando fundo padrão.');
-                backgroundLoaded = false;
-            };
+        // Personagens
+        const CHARACTERS = {
+            mario: { name: 'Mario', color1: '#e53935', color2: '#1e3a8a', skin: '#f5c542', jump: -10, speed: 4.5, w: 32, h: 40 },
+            luigi: { name: 'Luigi', color1: '#43a047', color2: '#1e3a8a', skin: '#f5c542', jump: -11, speed: 5.0, w: 32, h: 42 },
+            toad: { name: 'Toad', color1: '#e53935', color2: '#f5f5f5', skin: '#f5c542', jump: -9, speed: 4.0, w: 30, h: 34 }
+        };
 
-            const characterImages = {
-                mario: new Image(),
-                luigi: new Image()
-            };
-            
-            characterImages.mario.src = 'mario.png';
-            characterImages.luigi.src = 'luigi.png';
-            
-            const imagesLoaded = {
-                mario: false,
-                luigi: false
-            };
-            
-            characterImages.mario.onload = function() {
-                imagesLoaded.mario = true;
-                console.log('✅ Imagem do Mario carregada!');
-            };
-            
-            characterImages.mario.onerror = function() {
-                console.warn('⚠️ Não foi possível carregar mario.png');
-                imagesLoaded.mario = false;
-            };
-            
-            characterImages.luigi.onload = function() {
-                imagesLoaded.luigi = true;
-                console.log('✅ Imagem do Luigi carregada!');
-            };
-            
-            characterImages.luigi.onerror = function() {
-                console.warn('⚠️ Não foi possível carregar luigi.png');
-                imagesLoaded.luigi = false;
-            };
+        let selectedChar = 'mario';
+        let charStats = { ...CHARACTERS.mario };
 
-            const koopaImg = new Image();
-            koopaImg.src = 'koopa.png';
-            let koopaLoaded = false;
-            
-            koopaImg.onload = function() {
-                koopaLoaded = true;
-                console.log('✅ Imagem do Koopa carregada!');
-            };
-            
-            koopaImg.onerror = function() {
-                console.warn('⚠️ Não foi possível carregar koopa.png. Usando fallback visual.');
-                koopaLoaded = false;
-            };
+        let gameOver = false;
+        let win = false;
+        let score = 0;
+        let coins = 0;
+        let currentLevel = 1;
+        let bossDefeated = false;
+        let bossActive = false;
+        let currentBossName = '';
 
-            const mushroomImg = new Image();
-            mushroomImg.src = 'mushroom.png';
-            let mushroomLoaded = false;
-            mushroomImg.onload = function() { mushroomLoaded = true; console.log('✅ Cogumelo carregado!'); };
-            mushroomImg.onerror = function() { console.warn('⚠️ Não foi possível carregar mushroom.png'); };
+        const player = {
+            x: 60,
+            y: GROUND_Y - 40,
+            w: 32,
+            h: 40,
+            vy: 0,
+            onGround: false,
+            facing: 1,
+            frame: 0,
+            frameCounter: 0,
+            invincible: 0,
+            hasMushroom: false,
+            hasStar: false,
+            starTimer: 0,
+            bigMode: false,
+        };
 
-            const starImg = new Image();
-            starImg.src = 'star.png';
-            let starLoaded = false;
-            starImg.onload = function() { starLoaded = true; console.log('✅ Estrela carregada!'); };
-            starImg.onerror = function() { console.warn('⚠️ Não foi possível carregar star.png'); };
+        let powerups = [];
+        let platforms = [];
+        let coinObjects = [];
+        let enemies = [];
+        let boss = null;
+        let flag = { x: 760, y: GROUND_Y - 80, w: 20, h: 80 };
+        const keys = { left: false, right: false, up: false };
 
-            // --- Personagens ---
-            const CHARACTERS = {
-                mario: {
-                    name: 'Mario',
-                    color1: '#e53935',
-                    color2: '#1e3a8a',
-                    skin: '#f5c542',
-                    jump: -10,
-                    speed: 4.5,
-                    w: 32,
-                    h: 40,
-                    image: 'mario'
-                },
-                luigi: {
-                    name: 'Luigi',
-                    color1: '#43a047',
-                    color2: '#1e3a8a',
-                    skin: '#f5c542',
-                    jump: -11,
-                    speed: 5.0,
-                    w: 32,
-                    h: 42,
-                    image: 'luigi'
-                },
-                toad: {
-                    name: 'Toad',
-                    color1: '#e53935',
-                    color2: '#f5f5f5',
-                    skin: '#f5c542',
-                    jump: -9,
-                    speed: 4.0,
-                    w: 30,
-                    h: 34,
-                    image: null
-                }
-            };
+        function initGame() {
+            resetGame();
+            gameLoop();
+            tryAutoPlay();
+        }
 
-            let selectedChar = 'mario';
-            let charStats = { ...CHARACTERS.mario };
+        function tryAutoPlay() {
+            audio.play().then(() => {
+                isAudioPlaying = true;
+                playBtn.textContent = '⏸️';
+            }).catch(() => {});
+        }
 
-            // --- Estado do Jogo ---
-            let gameOver = false;
-            let win = false;
-            let score = 0;
-            let coins = 0;
-            let currentLevel = 1;
-            let bossDefeated = false;
-            let bossActive = false;
-
-            // --- Player com Power-ups ---
-            const player = {
-                x: 60,
-                y: GROUND_Y - 40,
-                w: 32,
-                h: 40,
-                vy: 0,
-                onGround: false,
-                facing: 1,
-                frame: 0,
-                frameCounter: 0,
-                invincible: 0,
-                hasMushroom: false,
-                hasStar: false,
-                starTimer: 0,
-                bigMode: false,
-            };
-
-            let powerups = [];
-            let platforms = [];
-            let coinObjects = [];
-            let enemies = [];
-            let boss = null;
-            let flag = { x: 760, y: GROUND_Y - 80, w: 20, h: 80 };
-
-            const keys = { left: false, right: false, up: false };
-
-            // --- Listeners ---
-            function keydownHandler(e) {
-                const key = e.key;
-                if (key === 'ArrowLeft' || key === 'Left' || key === 'a' || key === 'A') {
-                    keys.left = true;
-                    e.preventDefault();
-                } else if (key === 'ArrowRight' || key === 'Right' || key === 'd' || key === 'D') {
-                    keys.right = true;
-                    e.preventDefault();
-                } else if (key === 'ArrowUp' || key === 'Up' || key === 'w' || key === 'W' || key === ' ') {
-                    keys.up = true;
-                    e.preventDefault();
-                    if (!gameOver && !win) tryJump();
-                }
+        function applyCharStats() {
+            const stats = CHARACTERS[selectedChar];
+            charStats = { ...stats };
+            if (player.bigMode) {
+                player.w = stats.w * 1.4;
+                player.h = stats.h * 1.4;
+            } else {
+                player.w = stats.w;
+                player.h = stats.h;
             }
+            player.y = GROUND_Y - player.h;
+        }
 
-            function keyupHandler(e) {
-                const key = e.key;
-                if (key === 'ArrowLeft' || key === 'Left' || key === 'a' || key === 'A') {
-                    keys.left = false;
-                    e.preventDefault();
-                } else if (key === 'ArrowRight' || key === 'Right' || key === 'd' || key === 'D') {
-                    keys.right = false;
-                    e.preventDefault();
-                } else if (key === 'ArrowUp' || key === 'Up' || key === 'w' || key === 'W' || key === ' ') {
-                    keys.up = false;
-                    e.preventDefault();
-                }
+        function rectCollide(r1, r2) {
+            return r1.x < r2.x + r2.w &&
+                r1.x + r1.w > r2.x &&
+                r1.y < r2.y + r2.h &&
+                r1.y + r1.h > r2.y;
+        }
+
+        function tryJump() {
+            if (gameOver || win) return;
+            if (player.onGround) {
+                player.vy = charStats.jump * (player.hasMushroom ? 1.15 : 1);
+                player.onGround = false;
             }
+        }
 
-            window.addEventListener('keydown', keydownHandler);
-            window.addEventListener('keyup', keyupHandler);
-            window.addEventListener('contextmenu', e => e.preventDefault());
-
-            // --- Funções Auxiliares ---
-            function tryJump() {
-                if (gameOver || win) return;
-                if (player.onGround) {
-                    player.vy = charStats.jump * (player.hasMushroom ? 1.15 : 1);
-                    player.onGround = false;
-                }
+        function updatePowerBadge() {
+            if (player.hasStar) {
+                powerBadge.textContent = '⭐ ESTRELA ATIVA!';
+                powerBadge.className = 'power-badge active';
+                powerBadge.style.background = '#ffd700';
+                powerBadge.style.color = '#1d2f4a';
+            } else if (player.hasMushroom) {
+                powerBadge.textContent = '🍄 SUPER COGUMELO';
+                powerBadge.className = 'power-badge active';
+                powerBadge.style.background = '#ff6b35';
+                powerBadge.style.color = '#fff';
+            } else {
+                powerBadge.className = 'power-badge';
             }
+        }
 
-            function rectCollide(r1, r2) {
-                return r1.x < r2.x + r2.w &&
-                    r1.x + r1.w > r2.x &&
-                    r1.y < r2.y + r2.h &&
-                    r1.y + r1.h > r2.y;
+        function updateDisplay() {
+            coinSpan.textContent = coins;
+            scoreSpan.textContent = score;
+            levelSpan.textContent = currentLevel;
+            
+            // Atualizar badge da fase
+            levelBadge.className = 'level-badge';
+            if (currentLevel >= 7 && currentLevel <= 9) {
+                levelBadge.classList.add('hard');
+            } else if (currentLevel === 10) {
+                levelBadge.classList.add('boss');
             }
-
-            function applyCharStats() {
-                const stats = CHARACTERS[selectedChar];
-                charStats = { ...stats };
-                if (player.bigMode) {
-                    player.w = stats.w * 1.4;
-                    player.h = stats.h * 1.4;
-                } else {
-                    player.w = stats.w;
-                    player.h = stats.h;
-                }
-                player.y = GROUND_Y - player.h;
+            
+            // Mostrar nome do boss
+            if (boss && boss.active && currentLevel >= 7) {
+                let bossName = '';
+                if (currentLevel === 7) bossName = '👹 Larry Koopa';
+                else if (currentLevel === 8) bossName = '👹 Morton Koopa Jr';
+                else if (currentLevel === 9) bossName = '👹 Bowser Jr';
+                else if (currentLevel === 10) bossName = '👑 BOWSER';
+                document.querySelector('.level-badge').textContent = `⚔️ ${bossName}`;
+            } else {
+                document.querySelector('.level-badge').textContent = `Fase ${currentLevel}/10`;
             }
+        }
 
-            // --- Função para desenhar o personagem ---
-            function drawCharacter() {
-                const charKey = charStats.image;
-                const img = charKey ? characterImages[charKey] : null;
-                const isLoaded = charKey ? imagesLoaded[charKey] : false;
+        function loadLevel(level) {
+            bossDefeated = false;
+            bossActive = false;
+            boss = null;
+            currentBossName = '';
+            player.x = 60;
+            player.y = GROUND_Y - player.h;
+            player.vy = 0;
+            player.onGround = false;
+            player.invincible = 0;
+            if (!player.hasStar) {
+                player.hasMushroom = false;
+                player.bigMode = false;
+                applyCharStats();
+            }
+            flag.x = 760;
+            powerups = [];
+
+            platforms = [{ x: 0, y: GROUND_Y, w: 800, h: 12, type: 'ground' }];
+            coinObjects = [];
+            enemies = [];
+
+            // Fases 1-6: Fases normais
+            if (level === 1) {
+                platforms.push({ x: 150, y: 280, w: 80, h: 18, type: 'brick' });
+                platforms.push({ x: 320, y: 220, w: 80, h: 18, type: 'brick' });
+                platforms.push({ x: 500, y: 280, w: 80, h: 18, type: 'brick' });
+                platforms.push({ x: 650, y: 220, w: 80, h: 18, type: 'brick' });
+                platforms.push({ x: 400, y: 140, w: 32, h: 32, type: 'question', hasCoin: true });
                 
-                if (player.hasStar) {
-                    ctx.shadowColor = '#ffd700';
-                    ctx.shadowBlur = 25;
-                }
+                coinObjects = [
+                    { x: 190, y: 250, w: 18, h: 18, collected: false },
+                    { x: 360, y: 190, w: 18, h: 18, collected: false },
+                    { x: 540, y: 250, w: 18, h: 18, collected: false },
+                    { x: 690, y: 190, w: 18, h: 18, collected: false },
+                ];
                 
-                if (img && isLoaded) {
-                    const scale = player.bigMode ? 1.5 : 1.5;
-                    const imgWidth = player.w * scale;
-                    const imgHeight = player.h * scale;
-                    const offsetX = (imgWidth - player.w) / 2;
-                    const offsetY = (imgHeight - player.h) / 2;
-                    
-                    if (player.facing < 0) {
-                        ctx.save();
-                        ctx.translate(player.x + player.w / 2, player.y + player.h / 2);
-                        ctx.scale(-1, 1);
-                        ctx.drawImage(img, -imgWidth/2, -imgHeight/2, imgWidth, imgHeight);
-                        ctx.restore();
+                enemies = [
+                    { x: 250, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.2, active: true },
+                    { x: 450, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.0, active: true },
+                ];
+                
+                powerups = [
+                    { x: 180, y: 250, w: 24, h: 24, type: 'mushroom', active: true },
+                    { x: 550, y: 250, w: 24, h: 24, type: 'star', active: true },
+                ];
+
+            } else if (level === 2) {
+                platforms.push({ x: 100, y: 290, w: 70, h: 18, type: 'brick' });
+                platforms.push({ x: 240, y: 230, w: 70, h: 18, type: 'brick' });
+                platforms.push({ x: 380, y: 180, w: 70, h: 18, type: 'brick' });
+                platforms.push({ x: 520, y: 240, w: 70, h: 18, type: 'brick' });
+                platforms.push({ x: 660, y: 190, w: 70, h: 18, type: 'brick' });
+                platforms.push({ x: 350, y: 120, w: 32, h: 32, type: 'question', hasCoin: true });
+                
+                coinObjects = [
+                    { x: 140, y: 260, w: 18, h: 18, collected: false },
+                    { x: 280, y: 200, w: 18, h: 18, collected: false },
+                    { x: 420, y: 150, w: 18, h: 18, collected: false },
+                    { x: 560, y: 210, w: 18, h: 18, collected: false },
+                    { x: 700, y: 160, w: 18, h: 18, collected: false },
+                ];
+                
+                enemies = [
+                    { x: 180, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.5, active: true },
+                    { x: 400, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.2, active: true },
+                    { x: 600, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.8, active: true },
+                ];
+                
+                powerups = [
+                    { x: 280, y: 200, w: 24, h: 24, type: 'mushroom', active: true },
+                    { x: 560, y: 210, w: 24, h: 24, type: 'star', active: true },
+                    { x: 140, y: 260, w: 24, h: 24, type: 'mushroom', active: true },
+                ];
+
+            } else if (level === 3) {
+                platforms.push({ x: 80, y: 290, w: 70, h: 18, type: 'brick' });
+                platforms.push({ x: 210, y: 230, w: 70, h: 18, type: 'brick' });
+                platforms.push({ x: 340, y: 170, w: 70, h: 18, type: 'brick' });
+                platforms.push({ x: 470, y: 230, w: 70, h: 18, type: 'brick' });
+                platforms.push({ x: 600, y: 170, w: 70, h: 18, type: 'brick' });
+                platforms.push({ x: 300, y: 110, w: 32, h: 32, type: 'question', hasCoin: true });
+                
+                coinObjects = [
+                    { x: 120, y: 260, w: 18, h: 18, collected: false },
+                    { x: 250, y: 200, w: 18, h: 18, collected: false },
+                    { x: 380, y: 140, w: 18, h: 18, collected: false },
+                    { x: 510, y: 200, w: 18, h: 18, collected: false },
+                    { x: 640, y: 140, w: 18, h: 18, collected: false },
+                ];
+                
+                enemies = [
+                    { x: 150, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.5, active: true },
+                    { x: 500, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.5, active: true },
+                ];
+                
+                powerups = [
+                    { x: 250, y: 200, w: 24, h: 24, type: 'star', active: true },
+                    { x: 510, y: 200, w: 24, h: 24, type: 'mushroom', active: true },
+                ];
+
+            } else if (level === 4) {
+                platforms.push({ x: 60, y: 300, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 180, y: 240, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 300, y: 180, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 420, y: 240, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 540, y: 180, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 660, y: 240, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 200, y: 120, w: 32, h: 32, type: 'question', hasCoin: true });
+                platforms.push({ x: 500, y: 120, w: 32, h: 32, type: 'question', hasCoin: true });
+                
+                coinObjects = [
+                    { x: 100, y: 270, w: 18, h: 18, collected: false },
+                    { x: 220, y: 210, w: 18, h: 18, collected: false },
+                    { x: 340, y: 150, w: 18, h: 18, collected: false },
+                    { x: 460, y: 210, w: 18, h: 18, collected: false },
+                    { x: 580, y: 150, w: 18, h: 18, collected: false },
+                    { x: 700, y: 210, w: 18, h: 18, collected: false },
+                ];
+                
+                enemies = [
+                    { x: 120, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.2, active: true },
+                    { x: 350, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.3, active: true },
+                    { x: 580, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.6, active: true },
+                ];
+                
+                powerups = [
+                    { x: 220, y: 210, w: 24, h: 24, type: 'mushroom', active: true },
+                    { x: 460, y: 210, w: 24, h: 24, type: 'star', active: true },
+                    { x: 580, y: 150, w: 24, h: 24, type: 'mushroom', active: true },
+                ];
+
+            } else if (level === 5) {
+                platforms.push({ x: 50, y: 300, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 160, y: 250, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 270, y: 190, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 380, y: 130, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 490, y: 190, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 600, y: 250, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 710, y: 190, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 150, y: 90, w: 32, h: 32, type: 'question', hasCoin: true });
+                platforms.push({ x: 450, y: 80, w: 32, h: 32, type: 'question', hasCoin: true });
+                
+                coinObjects = [
+                    { x: 90, y: 270, w: 18, h: 18, collected: false },
+                    { x: 200, y: 220, w: 18, h: 18, collected: false },
+                    { x: 310, y: 160, w: 18, h: 18, collected: false },
+                    { x: 420, y: 100, w: 18, h: 18, collected: false },
+                    { x: 530, y: 160, w: 18, h: 18, collected: false },
+                    { x: 640, y: 220, w: 18, h: 18, collected: false },
+                    { x: 750, y: 160, w: 18, h: 18, collected: false },
+                ];
+                
+                enemies = [
+                    { x: 100, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.8, active: true },
+                    { x: 300, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.5, active: true },
+                    { x: 500, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.4, active: true },
+                    { x: 680, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.7, active: true },
+                ];
+                
+                powerups = [
+                    { x: 200, y: 220, w: 24, h: 24, type: 'star', active: true },
+                    { x: 420, y: 100, w: 24, h: 24, type: 'mushroom', active: true },
+                    { x: 640, y: 220, w: 24, h: 24, type: 'star', active: true },
+                    { x: 310, y: 160, w: 24, h: 24, type: 'mushroom', active: true },
+                ];
+
+            } else if (level === 6) {
+                platforms.push({ x: 30, y: 300, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 130, y: 250, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 230, y: 190, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 330, y: 130, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 430, y: 190, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 530, y: 250, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 630, y: 190, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 730, y: 130, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 100, y: 80, w: 32, h: 32, type: 'question', hasCoin: true });
+                platforms.push({ x: 350, y: 70, w: 32, h: 32, type: 'question', hasCoin: true });
+                platforms.push({ x: 600, y: 80, w: 32, h: 32, type: 'question', hasCoin: true });
+                
+                coinObjects = [
+                    { x: 70, y: 270, w: 18, h: 18, collected: false },
+                    { x: 170, y: 220, w: 18, h: 18, collected: false },
+                    { x: 270, y: 160, w: 18, h: 18, collected: false },
+                    { x: 370, y: 100, w: 18, h: 18, collected: false },
+                    { x: 470, y: 160, w: 18, h: 18, collected: false },
+                    { x: 570, y: 220, w: 18, h: 18, collected: false },
+                    { x: 670, y: 160, w: 18, h: 18, collected: false },
+                    { x: 770, y: 100, w: 18, h: 18, collected: false },
+                ];
+                
+                enemies = [
+                    { x: 80, y: GROUND_Y - 28, w: 28, h: 28, vx: -2.0, active: true },
+                    { x: 250, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.8, active: true },
+                    { x: 420, y: GROUND_Y - 28, w: 28, h: 28, vx: -2.2, active: true },
+                    { x: 590, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.6, active: true },
+                    { x: 720, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.9, active: true },
+                ];
+                
+                powerups = [
+                    { x: 170, y: 220, w: 24, h: 24, type: 'mushroom', active: true },
+                    { x: 370, y: 100, w: 24, h: 24, type: 'star', active: true },
+                    { x: 570, y: 220, w: 24, h: 24, type: 'mushroom', active: true },
+                    { x: 670, y: 160, w: 24, h: 24, type: 'star', active: true },
+                    { x: 270, y: 160, w: 24, h: 24, type: 'mushroom', active: true },
+                ];
+
+            // ============================================================
+            // FASES 7-10: FASES DIFÍCEIS COM BOSSES
+            // ============================================================
+            } else if (level === 7) {
+                // Fase 7 - Larry Koopa
+                platforms.push({ x: 80, y: 290, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 200, y: 230, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 320, y: 170, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 440, y: 230, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 560, y: 290, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 680, y: 230, w: 60, h: 18, type: 'brick' });
+                platforms.push({ x: 250, y: 110, w: 32, h: 32, type: 'question', hasCoin: true });
+                platforms.push({ x: 500, y: 110, w: 32, h: 32, type: 'question', hasCoin: true });
+                
+                coinObjects = [
+                    { x: 120, y: 260, w: 18, h: 18, collected: false },
+                    { x: 240, y: 200, w: 18, h: 18, collected: false },
+                    { x: 360, y: 140, w: 18, h: 18, collected: false },
+                    { x: 480, y: 200, w: 18, h: 18, collected: false },
+                    { x: 600, y: 260, w: 18, h: 18, collected: false },
+                    { x: 720, y: 200, w: 18, h: 18, collected: false },
+                ];
+                
+                enemies = [
+                    { x: 150, y: GROUND_Y - 28, w: 28, h: 28, vx: -2.0, active: true },
+                    { x: 400, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.8, active: true },
+                    { x: 600, y: GROUND_Y - 28, w: 28, h: 28, vx: -2.5, active: true },
+                ];
+                
+                powerups = [
+                    { x: 240, y: 200, w: 24, h: 24, type: 'mushroom', active: true },
+                    { x: 480, y: 200, w: 24, h: 24, type: 'star', active: true },
+                ];
+                
+                // LARRY KOOPA - BOSS
+                boss = {
+                    x: 700,
+                    y: GROUND_Y - 64,
+                    w: 48,
+                    h: 64,
+                    vx: -2.5,
+                    active: true,
+                    hp: 5,
+                    maxHp: 5,
+                    hitCooldown: 0,
+                    name: 'Larry Koopa',
+                    color: '#4CAF50',
+                    attackTimer: 0,
+                    attackCooldown: 0
+                };
+                bossActive = true;
+                flag.x = 780;
+
+            } else if (level === 8) {
+                // Fase 8 - Morton Koopa Jr
+                platforms.push({ x: 50, y: 300, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 150, y: 250, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 250, y: 190, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 350, y: 130, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 450, y: 190, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 550, y: 250, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 650, y: 190, w: 50, h: 18, type: 'brick' });
+                platforms.push({ x: 300, y: 70, w: 32, h: 32, type: 'question', hasCoin: true });
+                platforms.push({ x: 500, y: 70, w: 32, h: 32, type: 'question', hasCoin: true });
+                
+                coinObjects = [
+                    { x: 90, y: 270, w: 18, h: 18, collected: false },
+                    { x: 190, y: 220, w: 18, h: 18, collected: false },
+                    { x: 290, y: 160, w: 18, h: 18, collected: false },
+                    { x: 390, y: 100, w: 18, h: 18, collected: false },
+                    { x: 490, y: 160, w: 18, h: 18, collected: false },
+                    { x: 590, y: 220, w: 18, h: 18, collected: false },
+                    { x: 690, y: 160, w: 18, h: 18, collected: false },
+                ];
+                
+                enemies = [
+                    { x: 120, y: GROUND_Y - 28, w: 28, h: 28, vx: -2.2, active: true },
+                    { x: 280, y: GROUND_Y - 28, w: 28, h: 28, vx: 2.0, active: true },
+                    { x: 450, y: GROUND_Y - 28, w: 28, h: 28, vx: -2.8, active: true },
+                    { x: 620, y: GROUND_Y - 28, w: 28, h: 28, vx: 2.3, active: true },
+                ];
+                
+                powerups = [
+                    { x: 290, y: 160, w: 24, h: 24, type: 'star', active: true },
+                    { x: 490, y: 160, w: 24, h: 24, type: 'mushroom', active: true },
+                    { x: 190, y: 220, w: 24, h: 24, type: 'star', active: true },
+                ];
+                
+                // MORTON KOOPA JR - BOSS
+                boss = {
+                    x: 700,
+                    y: GROUND_Y - 72,
+                    w: 52,
+                    h: 72,
+                    vx: -2.8,
+                    active: true,
+                    hp: 6,
+                    maxHp: 6,
+                    hitCooldown: 0,
+                    name: 'Morton Koopa Jr',
+                    color: '#9C27B0',
+                    attackTimer: 0,
+                    attackCooldown: 0,
+                    bigMode: true
+                };
+                bossActive = true;
+                flag.x = 780;
+
+            } else if (level === 9) {
+                // Fase 9 - Bowser Jr
+                platforms.push({ x: 30, y: 310, w: 40, h: 18, type: 'brick' });
+                platforms.push({ x: 120, y: 260, w: 40, h: 18, type: 'brick' });
+                platforms.push({ x: 210, y: 200, w: 40, h: 18, type: 'brick' });
+                platforms.push({ x: 300, y: 140, w: 40, h: 18, type: 'brick' });
+                platforms.push({ x: 390, y: 200, w: 40, h: 18, type: 'brick' });
+                platforms.push({ x: 480, y: 260, w: 40, h: 18, type: 'brick' });
+                platforms.push({ x: 570, y: 200, w: 40, h: 18, type: 'brick' });
+                platforms.push({ x: 660, y: 140, w: 40, h: 18, type: 'brick' });
+                platforms.push({ x: 200, y: 80, w: 32, h: 32, type: 'question', hasCoin: true });
+                platforms.push({ x: 400, y: 80, w: 32, h: 32, type: 'question', hasCoin: true });
+                platforms.push({ x: 600, y: 80, w: 32, h: 32, type: 'question', hasCoin: true });
+                
+                coinObjects = [
+                    { x: 70, y: 280, w: 18, h: 18, collected: false },
+                    { x: 160, y: 230, w: 18, h: 18, collected: false },
+                    { x: 250, y: 170, w: 18, h: 18, collected: false },
+                    { x: 340, y: 110, w: 18, h: 18, collected: false },
+                    { x: 430, y: 170, w: 18, h: 18, collected: false },
+                    { x: 520, y: 230, w: 18, h: 18, collected: false },
+                    { x: 610, y: 170, w: 18, h: 18, collected: false },
+                    { x: 700, y: 110, w: 18, h: 18, collected: false },
+                ];
+                
+                enemies = [
+                    { x: 100, y: GROUND_Y - 28, w: 28, h: 28, vx: -2.5, active: true },
+                    { x: 250, y: GROUND_Y - 28, w: 28, h: 28, vx: 2.2, active: true },
+                    { x: 400, y: GROUND_Y - 28, w: 28, h: 28, vx: -3.0, active: true },
+                    { x: 550, y: GROUND_Y - 28, w: 28, h: 28, vx: 2.5, active: true },
+                    { x: 680, y: GROUND_Y - 28, w: 28, h: 28, vx: -2.7, active: true },
+                ];
+                
+                powerups = [
+                    { x: 250, y: 170, w: 24, h: 24, type: 'mushroom', active: true },
+                    { x: 430, y: 170, w: 24, h: 24, type: 'star', active: true },
+                    { x: 610, y: 170, w: 24, h: 24, type: 'mushroom', active: true },
+                    { x: 340, y: 110, w: 24, h: 24, type: 'star', active: true },
+                ];
+                
+                // BOWSER JR - BOSS
+                boss = {
+                    x: 700,
+                    y: GROUND_Y - 60,
+                    w: 44,
+                    h: 60,
+                    vx: -3.0,
+                    active: true,
+                    hp: 7,
+                    maxHp: 7,
+                    hitCooldown: 0,
+                    name: 'Bowser Jr',
+                    color: '#FF5722',
+                    attackTimer: 0,
+                    attackCooldown: 0,
+                    fireBreath: false
+                };
+                bossActive = true;
+                flag.x = 780;
+
+            } else if (level === 10) {
+                // Fase 10 - BOWSER (FINAL BOSS)
+                platforms.push({ x: 20, y: 320, w: 30, h: 18, type: 'brick' });
+                platforms.push({ x: 100, y: 270, w: 30, h: 18, type: 'brick' });
+                platforms.push({ x: 180, y: 210, w: 30, h: 18, type: 'brick' });
+                platforms.push({ x: 260, y: 150, w: 30, h: 18, type: 'brick' });
+                platforms.push({ x: 340, y: 210, w: 30, h: 18, type: 'brick' });
+                platforms.push({ x: 420, y: 270, w: 30, h: 18, type: 'brick' });
+                platforms.push({ x: 500, y: 210, w: 30, h: 18, type: 'brick' });
+                platforms.push({ x: 580, y: 150, w: 30, h: 18, type: 'brick' });
+                platforms.push({ x: 660, y: 210, w: 30, h: 18, type: 'brick' });
+                platforms.push({ x: 740, y: 270, w: 30, h: 18, type: 'brick' });
+                platforms.push({ x: 150, y: 90, w: 32, h: 32, type: 'question', hasCoin: true });
+                platforms.push({ x: 350, y: 90, w: 32, h: 32, type: 'question', hasCoin: true });
+                platforms.push({ x: 550, y: 90, w: 32, h: 32, type: 'question', hasCoin: true });
+                
+                coinObjects = [
+                    { x: 50, y: 290, w: 18, h: 18, collected: false },
+                    { x: 130, y: 240, w: 18, h: 18, collected: false },
+                    { x: 210, y: 180, w: 18, h: 18, collected: false },
+                    { x: 290, y: 120, w: 18, h: 18, collected: false },
+                    { x: 370, y: 180, w: 18, h: 18, collected: false },
+                    { x: 450, y: 240, w: 18, h: 18, collected: false },
+                    { x: 530, y: 180, w: 18, h: 18, collected: false },
+                    { x: 610, y: 120, w: 18, h: 18, collected: false },
+                    { x: 690, y: 180, w: 18, h: 18, collected: false },
+                    { x: 770, y: 240, w: 18, h: 18, collected: false },
+                ];
+                
+                enemies = [
+                    { x: 80, y: GROUND_Y - 28, w: 28, h: 28, vx: -3.0, active: true },
+                    { x: 200, y: GROUND_Y - 28, w: 28, h: 28, vx: 2.8, active: true },
+                    { x: 320, y: GROUND_Y - 28, w: 28, h: 28, vx: -3.5, active: true },
+                    { x: 440, y: GROUND_Y - 28, w: 28, h: 28, vx: 3.0, active: true },
+                    { x: 560, y: GROUND_Y - 28, w: 28, h: 28, vx: -3.2, active: true },
+                    { x: 680, y: GROUND_Y - 28, w: 28, h: 28, vx: 2.7, active: true },
+                ];
+                
+                powerups = [
+                    { x: 210, y: 180, w: 24, h: 24, type: 'star', active: true },
+                    { x: 370, y: 180, w: 24, h: 24, type: 'mushroom', active: true },
+                    { x: 530, y: 180, w: 24, h: 24, type: 'star', active: true },
+                    { x: 690, y: 180, w: 24, h: 24, type: 'mushroom', active: true },
+                    { x: 130, y: 240, w: 24, h: 24, type: 'star', active: true },
+                    { x: 450, y: 240, w: 24, h: 24, type: 'mushroom', active: true },
+                ];
+                
+                // BOWSER - BOSS FINAL
+                boss = {
+                    x: 700,
+                    y: GROUND_Y - 80,
+                    w: 56,
+                    h: 80,
+                    vx: -3.5,
+                    active: true,
+                    hp: 10,
+                    maxHp: 10,
+                    hitCooldown: 0,
+                    name: 'BOWSER',
+                    color: '#D32F2F',
+                    attackTimer: 0,
+                    attackCooldown: 0,
+                    fireBreath: true,
+                    finalBoss: true
+                };
+                bossActive = true;
+                flag.x = 780;
+            }
+
+            levelSpan.textContent = level;
+            updateDisplay();
+            updatePowerBadge();
+        }
+
+        function resetGame() {
+            gameOver = false;
+            win = false;
+            score = 0;
+            coins = 0;
+            currentLevel = 1;
+            player.hasMushroom = false;
+            player.hasStar = false;
+            player.bigMode = false;
+            player.starTimer = 0;
+            applyCharStats();
+            loadLevel(currentLevel);
+            updateDisplay();
+            updatePowerBadge();
+        }
+
+        function nextLevel() {
+            if (currentLevel < MAX_LEVEL) {
+                currentLevel++;
+                loadLevel(currentLevel);
+                win = false;
+                gameOver = false;
+                bossDefeated = false;
+            } else {
+                win = true;
+            }
+        }
+
+        // Seleção de personagem
+        document.querySelectorAll('.char-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.char-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedChar = this.dataset.char;
+                player.hasMushroom = false;
+                player.hasStar = false;
+                player.bigMode = false;
+                player.starTimer = 0;
+                applyCharStats();
+                updatePowerBadge();
+                loadLevel(currentLevel);
+            });
+        });
+
+        // Reiniciar
+        document.getElementById('restartBtn').addEventListener('click', resetGame);
+
+        // Teclas
+        window.addEventListener('keydown', function(e) {
+            const key = e.key;
+            if (key === 'ArrowLeft' || key === 'Left' || key === 'a' || key === 'A') {
+                keys.left = true;
+                e.preventDefault();
+            } else if (key === 'ArrowRight' || key === 'Right' || key === 'd' || key === 'D') {
+                keys.right = true;
+                e.preventDefault();
+            } else if (key === 'ArrowUp' || key === 'Up' || key === 'w' || key === 'W' || key === ' ') {
+                keys.up = true;
+                e.preventDefault();
+                tryJump();
+            }
+        });
+
+        window.addEventListener('keyup', function(e) {
+            const key = e.key;
+            if (key === 'ArrowLeft' || key === 'Left' || key === 'a' || key === 'A') {
+                keys.left = false;
+                e.preventDefault();
+            } else if (key === 'ArrowRight' || key === 'Right' || key === 'd' || key === 'D') {
+                keys.right = false;
+                e.preventDefault();
+            } else if (key === 'ArrowUp' || key === 'Up' || key === 'w' || key === 'W' || key === ' ') {
+                keys.up = false;
+                e.preventDefault();
+            }
+        });
+
+        window.addEventListener('contextmenu', e => e.preventDefault());
+
+        function update() {
+            if (gameOver || win) return;
+
+            if (player.hasStar) {
+                player.starTimer--;
+                if (player.starTimer <= 0) {
+                    player.hasStar = false;
+                    player.starTimer = 0;
+                    updatePowerBadge();
+                }
+            }
+
+            if (player.invincible > 0) player.invincible--;
+
+            const speed = player.hasStar ? charStats.speed * 1.5 : charStats.speed;
+            if (keys.left) {
+                player.x -= speed;
+                player.facing = -1;
+            }
+            if (keys.right) {
+                player.x += speed;
+                player.facing = 1;
+            }
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.w > 800) player.x = 800 - player.w;
+
+            player.vy += GRAVITY;
+            player.y += player.vy;
+
+            player.onGround = false;
+            for (let p of platforms) {
+                if (player.vy >= 0 && rectCollide(player, p)) {
+                    player.y = p.y - player.h;
+                    player.vy = 0;
+                    player.onGround = true;
+                }
+                if (p.type === 'question' && p.hasCoin && rectCollide(player, p)) {
+                    p.hasCoin = false;
+                    coins++;
+                    score += 50;
+                    updateDisplay();
+                }
+            }
+
+            for (let coin of coinObjects) {
+                if (!coin.collected && rectCollide(player, coin)) {
+                    coin.collected = true;
+                    coins++;
+                    score += 30;
+                    updateDisplay();
+                }
+            }
+
+            for (let pu of powerups) {
+                if (!pu.active) continue;
+                if (rectCollide(player, pu)) {
+                    pu.active = false;
+                    if (pu.type === 'mushroom') {
+                        player.hasMushroom = true;
+                        player.bigMode = true;
+                        applyCharStats();
+                        score += 100;
+                        updateDisplay();
+                        updatePowerBadge();
+                    } else if (pu.type === 'star') {
+                        player.hasStar = true;
+                        player.starTimer = 300;
+                        player.invincible = 300;
+                        score += 150;
+                        updateDisplay();
+                        updatePowerBadge();
+                    }
+                }
+            }
+
+            // Inimigos
+            for (let enemy of enemies) {
+                if (!enemy.active) continue;
+                enemy.x += enemy.vx;
+                if (enemy.x < 20 || enemy.x > 780) enemy.vx *= -1;
+
+                if (rectCollide(player, enemy)) {
+                    if (player.hasStar || player.invincible > 0) {
+                        enemy.active = false;
+                        score += 50;
+                        updateDisplay();
+                    } else if (player.vy > 0 && player.y + player.h - enemy.y < 20) {
+                        enemy.active = false;
+                        player.vy = -8;
+                        score += 50;
+                        updateDisplay();
                     } else {
-                        ctx.drawImage(img, player.x - offsetX, player.y - offsetY, imgWidth, imgHeight);
-                    }
-                } else {
-                    const color = player.hasStar ? '#ffd700' : (player.hasMushroom ? '#ff6b35' : charStats.color1);
-                    ctx.fillStyle = color;
-                    ctx.fillRect(player.x, player.y + 10, player.w, player.h - 10);
-                    ctx.fillStyle = player.hasStar ? '#fff' : charStats.skin;
-                    ctx.fillRect(player.x + 4, player.y, player.w - 8, 14);
-                    ctx.fillStyle = color;
-                    ctx.fillRect(player.x + 2, player.y - 4, player.w - 4, 8);
-                    ctx.fillStyle = '#fff';
-                    ctx.fillRect(player.x + (player.facing > 0 ? 18 : 6), player.y + 4, 6, 6);
-                    ctx.fillStyle = '#000';
-                    ctx.fillRect(player.x + (player.facing > 0 ? 20 : 8), player.y + 6, 3, 3);
-                    ctx.fillStyle = '#4e342e';
-                    ctx.fillRect(player.x + 2, player.y + player.h - 4, 10, 4);
-                    ctx.fillRect(player.x + player.w - 12, player.y + player.h - 4, 10, 4);
-                    
-                    if (player.hasStar) {
-                        ctx.fillStyle = '#ffd700';
-                        ctx.font = '16px "Courier New"';
-                        ctx.textAlign = 'center';
-                        ctx.fillText('⭐', player.x + player.w/2, player.y - 8);
-                    } else if (player.hasMushroom) {
-                        ctx.fillStyle = '#ff6b35';
-                        ctx.font = '14px "Courier New"';
-                        ctx.textAlign = 'center';
-                        ctx.fillText('🍄', player.x + player.w/2, player.y - 6);
+                        gameOver = true;
                     }
                 }
+            }
+
+            // Boss
+            if (boss && boss.active) {
+                boss.x += boss.vx;
+                if (boss.x < 30 || boss.x > 750) boss.vx *= -1;
+
+                if (boss.hitCooldown > 0) boss.hitCooldown--;
+
+                // Ataques do boss (apenas efeito visual)
+                if (boss.attackCooldown > 0) boss.attackCooldown--;
                 
+                // Boss mais rápido nas fases difíceis
+                if (currentLevel >= 8) {
+                    boss.vx = Math.sign(boss.vx) * (2.5 + (currentLevel - 7) * 0.3);
+                }
+
+                if (rectCollide(player, boss)) {
+                    if (player.hasStar || player.invincible > 0) {
+                        if (boss.hitCooldown <= 0) {
+                            boss.hp--;
+                            boss.hitCooldown = 30;
+                            score += 150;
+                            updateDisplay();
+                            if (boss.hp <= 0) {
+                                boss.active = false;
+                                bossDefeated = true;
+                                score += 500 * (currentLevel - 6);
+                                updateDisplay();
+                            }
+                        }
+                    } else if (player.vy > 0 && player.y + player.h - boss.y < 25) {
+                        if (boss.hitCooldown <= 0) {
+                            boss.hp--;
+                            boss.hitCooldown = 30;
+                            player.vy = -10;
+                            score += 150;
+                            updateDisplay();
+                            if (boss.hp <= 0) {
+                                boss.active = false;
+                                bossDefeated = true;
+                                score += 500 * (currentLevel - 6);
+                                updateDisplay();
+                            }
+                        }
+                    } else {
+                        gameOver = true;
+                    }
+                }
+            }
+
+            // Verificar se chegou na bandeira
+            if (rectCollide(player, flag)) {
+                if (bossActive && !bossDefeated) {
+                    // Precisa derrotar o boss primeiro
+                } else {
+                    win = true;
+                    if (currentLevel === MAX_LEVEL) {
+                        // Vitória final
+                    }
+                }
+            }
+
+            // Cair no vazio
+            if (player.y > 450) {
+                gameOver = true;
+            }
+        }
+
+        function drawBoss() {
+            if (!boss || !boss.active) return;
+            
+            const b = boss;
+            
+            // Sombra do boss
+            ctx.fillStyle = 'rgba(0,0,0,0.3)';
+            ctx.beginPath();
+            ctx.ellipse(b.x + b.w/2, GROUND_Y + 5, b.w/2, 10, 0, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Corpo do boss
+            let grad = ctx.createLinearGradient(b.x, b.y, b.x + b.w, b.y + b.h);
+            if (currentLevel === 10) {
+                grad.addColorStop(0, '#D32F2F');
+                grad.addColorStop(0.5, '#B71C1C');
+                grad.addColorStop(1, '#880E4F');
+            } else if (currentLevel === 9) {
+                grad.addColorStop(0, '#FF5722');
+                grad.addColorStop(1, '#BF360C');
+            } else if (currentLevel === 8) {
+                grad.addColorStop(0, '#9C27B0');
+                grad.addColorStop(1, '#4A148C');
+            } else {
+                grad.addColorStop(0, '#4CAF50');
+                grad.addColorStop(1, '#1B5E20');
+            }
+            
+            ctx.fillStyle = grad;
+            ctx.shadowColor = boss.color || '#ff0000';
+            ctx.shadowBlur = currentLevel === 10 ? 40 : 20;
+            
+            // Corpo
+            ctx.beginPath();
+            ctx.roundRect(b.x, b.y, b.w, b.h, 8);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            
+            // Cabeça
+            ctx.fillStyle = '#FFB74D';
+            ctx.beginPath();
+            ctx.arc(b.x + b.w/2, b.y + 15, 16, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Olhos
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.arc(b.x + 14, b.y + 12, 7, 0, Math.PI * 2);
+            ctx.arc(b.x + b.w - 14, b.y + 12, 7, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.fillStyle = '#1a1a2e';
+            ctx.beginPath();
+            ctx.arc(b.x + 16, b.y + 14, 4, 0, Math.PI * 2);
+            ctx.arc(b.x + b.w - 12, b.y + 14, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Sobrancelhas (expressão de raiva)
+            ctx.strokeStyle = '#1a1a2e';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(b.x + 8, b.y + 6);
+            ctx.lineTo(b.x + 18, b.y + 8);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(b.x + b.w - 8, b.y + 6);
+            ctx.lineTo(b.x + b.w - 18, b.y + 8);
+            ctx.stroke();
+            
+            // Boca
+            if (currentLevel === 10) {
+                // Bowser com fogo
+                ctx.fillStyle = '#FF6F00';
+                ctx.beginPath();
+                ctx.arc(b.x + b.w/2, b.y + 24, 12, 0, Math.PI);
+                ctx.fill();
+                ctx.fillStyle = '#FFAB00';
+                ctx.beginPath();
+                ctx.arc(b.x + b.w/2, b.y + 22, 8, 0, Math.PI);
+                ctx.fill();
+                
+                // Fogo saindo da boca
+                if (Math.floor(Date.now() / 500) % 2 === 0) {
+                    ctx.fillStyle = 'rgba(255, 107, 0, 0.6)';
+                    ctx.beginPath();
+                    ctx.moveTo(b.x + b.w/2 - 10, b.y + 26);
+                    ctx.lineTo(b.x + b.w/2, b.y + 40);
+                    ctx.lineTo(b.x + b.w/2 + 10, b.y + 26);
+                    ctx.fill();
+                    ctx.fillStyle = 'rgba(255, 200, 0, 0.4)';
+                    ctx.beginPath();
+                    ctx.moveTo(b.x + b.w/2 - 6, b.y + 28);
+                    ctx.lineTo(b.x + b.w/2, b.y + 50);
+                    ctx.lineTo(b.x + b.w/2 + 6, b.y + 28);
+                    ctx.fill();
+                }
+            } else {
+                // Sorriso malvado
+                ctx.fillStyle = '#1a1a2e';
+                ctx.beginPath();
+                ctx.arc(b.x + b.w/2, b.y + 24, 8, 0, Math.PI);
+                ctx.fill();
+            }
+            
+            // Chifres (Bowser e Bowser Jr)
+            if (currentLevel >= 9) {
+                ctx.fillStyle = '#5D4037';
+                ctx.beginPath();
+                ctx.moveTo(b.x + 6, b.y + 2);
+                ctx.lineTo(b.x, b.y - 10);
+                ctx.lineTo(b.x + 12, b.y + 4);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(b.x + b.w - 6, b.y + 2);
+                ctx.lineTo(b.x + b.w, b.y - 10);
+                ctx.lineTo(b.x + b.w - 12, b.y + 4);
+                ctx.fill();
+            }
+            
+            // Coroa (Bowser)
+            if (currentLevel === 10) {
+                ctx.fillStyle = '#FFD700';
+                ctx.shadowColor = '#FFD700';
+                ctx.shadowBlur = 15;
+                ctx.font = '20px "Courier New"';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('👑', b.x + b.w/2, b.y - 12);
                 ctx.shadowBlur = 0;
             }
+            
+            // Nome do boss
+            ctx.fillStyle = '#fff';
+            ctx.shadowColor = 'rgba(0,0,0,0.8)';
+            ctx.shadowBlur = 10;
+            ctx.font = 'bold 14px "Courier New"';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            let bossEmoji = currentLevel === 10 ? '👑' : '👹';
+            ctx.fillText(`${bossEmoji} ${boss.name}`, b.x + b.w/2, b.y - 18);
+            ctx.shadowBlur = 0;
+            
+            // Barra de vida do boss
+            const barWidth = b.w + 20;
+            const barX = b.x - 10;
+            const barY = b.y - 36;
+            
+            ctx.fillStyle = 'rgba(0,0,0,0.7)';
+            ctx.beginPath();
+            ctx.roundRect(barX, barY, barWidth, 10, 5);
+            ctx.fill();
+            
+            const hpPercent = b.hp / b.maxHp;
+            const hpColor = hpPercent > 0.5 ? '#4CAF50' : (hpPercent > 0.25 ? '#FF9800' : '#F44336');
+            ctx.fillStyle = hpColor;
+            ctx.shadowColor = hpColor;
+            ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.roundRect(barX + 2, barY + 2, (barWidth - 4) * hpPercent, 6, 3);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            
+            // Texto da vida
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 10px "Courier New"';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(`${b.hp}/${b.maxHp}`, barX + barWidth/2, barY + 5);
+        }
 
-            // --- Função para desenhar inimigos ---
-            function drawEnemy(enemy) {
-                if (koopaLoaded) {
-                    const size = Math.max(enemy.w, enemy.h);
-                    const imgSize = size * 1.3;
-                    const offsetX = (imgSize - enemy.w) / 2;
-                    const offsetY = (imgSize - enemy.h) / 2;
-                    ctx.drawImage(koopaImg, enemy.x - offsetX, enemy.y - offsetY, imgSize, imgSize);
+        function draw() {
+            ctx.clearRect(0, 0, 800, 400);
+            
+            // Fundo - com cores diferentes para fases difíceis
+            if (currentLevel >= 7 && currentLevel <= 9) {
+                const colors = ['#1a0a2e', '#2d1b4e', '#3d1f5e'];
+                let grad = ctx.createLinearGradient(0, 0, 0, 400);
+                grad.addColorStop(0, colors[currentLevel - 7]);
+                grad.addColorStop(1, '#0a0a1a');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, 800, 400);
+            } else if (currentLevel === 10) {
+                let grad = ctx.createLinearGradient(0, 0, 0, 400);
+                grad.addColorStop(0, '#1a0000');
+                grad.addColorStop(0.5, '#2d0a0a');
+                grad.addColorStop(1, '#0a0000');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, 800, 400);
+                // Efeito de fogo no fundo
+                for (let i = 0; i < 20; i++) {
+                    let x = Math.random() * 800;
+                    let y = Math.random() * 300 + 100;
+                    let alpha = Math.random() * 0.1;
+                    ctx.fillStyle = `rgba(255, 100, 0, ${alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(x, y, 20 + Math.random() * 30, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            } else {
+                ctx.fillStyle = '#5c94fc';
+                ctx.fillRect(0, 0, 800, 400);
+                // Nuvens
+                ctx.fillStyle = 'rgba(255,255,255,0.3)';
+                ctx.beginPath();
+                ctx.arc(100, 60, 40, 0, Math.PI * 2);
+                ctx.arc(140, 40, 35, 0, Math.PI * 2);
+                ctx.arc(170, 60, 30, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(600, 50, 45, 0, Math.PI * 2);
+                ctx.arc(650, 30, 35, 0, Math.PI * 2);
+                ctx.arc(680, 50, 30, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            // Plataformas
+            for (let p of platforms) {
+                if (p.type === 'ground') {
+                    if (currentLevel >= 7) {
+                        ctx.fillStyle = '#2d1b3d';
+                        ctx.fillRect(p.x, p.y, p.w, p.h);
+                        ctx.fillStyle = '#3d2b4d';
+                        ctx.fillRect(p.x, p.y + 4, p.w, 4);
+                    } else {
+                        ctx.fillStyle = '#4a7a3a';
+                        ctx.fillRect(p.x, p.y, p.w, p.h);
+                        ctx.fillStyle = '#3a6a2a';
+                        ctx.fillRect(p.x, p.y + 4, p.w, 4);
+                    }
+                } else if (p.type === 'brick') {
+                    if (currentLevel >= 7) {
+                        ctx.fillStyle = '#5d2a3a';
+                        ctx.fillRect(p.x, p.y, p.w, p.h);
+                        ctx.strokeStyle = '#3d1a2a';
+                        ctx.lineWidth = 1;
+                        ctx.strokeRect(p.x, p.y, p.w, p.h);
+                        ctx.fillStyle = '#4d2a3a';
+                        ctx.fillRect(p.x + 4, p.y + 4, p.w/2 - 4, 4);
+                        ctx.fillRect(p.x + p.w/2, p.y + 4, p.w/2 - 4, 4);
+                    } else {
+                        ctx.fillStyle = '#c67b4a';
+                        ctx.fillRect(p.x, p.y, p.w, p.h);
+                        ctx.strokeStyle = '#8d5a3a';
+                        ctx.lineWidth = 1;
+                        ctx.strokeRect(p.x, p.y, p.w, p.h);
+                        ctx.fillStyle = '#b06a3a';
+                        ctx.fillRect(p.x + 4, p.y + 4, p.w/2 - 4, 4);
+                        ctx.fillRect(p.x + p.w/2, p.y + 4, p.w/2 - 4, 4);
+                    }
+                } else if (p.type === 'question') {
+                    ctx.fillStyle = '#f5c542';
+                    ctx.fillRect(p.x, p.y, p.w, p.h);
+                    ctx.fillStyle = '#dba52a';
+                    ctx.fillRect(p.x + 4, p.y + 4, p.w - 8, p.h - 8);
+                    ctx.fillStyle = '#f5c542';
+                    ctx.font = '16px "Courier New"';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('?', p.x + p.w/2, p.y + p.h/2 + 1);
+                    if (p.hasCoin) {
+                        ctx.fillStyle = 'rgba(255,215,0,0.3)';
+                        ctx.fillRect(p.x, p.y, p.w, p.h);
+                    }
+                }
+            }
+
+            // Moedas
+            for (let coin of coinObjects) {
+                if (!coin.collected) {
+                    ctx.fillStyle = '#ffd700';
+                    ctx.shadowColor = '#ffd700';
+                    ctx.shadowBlur = 10;
+                    ctx.beginPath();
+                    ctx.arc(coin.x + coin.w/2, coin.y + coin.h/2, coin.w/2, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            // Power-ups
+            for (let pu of powerups) {
+                if (!pu.active) continue;
+                if (pu.type === 'mushroom') {
+                    ctx.fillStyle = '#ff6b35';
+                    ctx.shadowColor = '#ff6b35';
+                    ctx.shadowBlur = 15;
+                    ctx.beginPath();
+                    ctx.arc(pu.x + pu.w/2, pu.y + pu.h/2, pu.w/2, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    ctx.fillStyle = '#fff';
+                    ctx.beginPath();
+                    ctx.arc(pu.x + pu.w/2 - 4, pu.y + pu.h/2 - 4, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(pu.x + pu.w/2 + 4, pu.y + pu.h/2 - 4, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (pu.type === 'star') {
+                    ctx.fillStyle = '#ffd700';
+                    ctx.shadowColor = '#ffd700';
+                    ctx.shadowBlur = 30;
+                    ctx.font = '24px "Courier New"';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('⭐', pu.x + pu.w/2, pu.y + pu.h/2);
+                    ctx.shadowBlur = 0;
+                }
+            }
+
+            // Inimigos
+            for (let enemy of enemies) {
+                if (!enemy.active) continue;
+                if (currentLevel >= 7) {
+                    ctx.fillStyle = '#6d2a2a';
+                    ctx.fillRect(enemy.x, enemy.y, enemy.w, enemy.h);
+                    ctx.fillStyle = '#4d1a1a';
+                    ctx.fillRect(enemy.x + 4, enemy.y - 4, enemy.w - 8, 6);
+                    ctx.fillStyle = '#ff6b6b';
+                    ctx.fillRect(enemy.x + 6, enemy.y + 6, 6, 6);
+                    ctx.fillRect(enemy.x + 16, enemy.y + 6, 6, 6);
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(enemy.x + 8, enemy.y + 8, 3, 3);
+                    ctx.fillRect(enemy.x + 18, enemy.y + 8, 3, 3);
                 } else {
                     ctx.fillStyle = '#8d6e63';
                     ctx.fillRect(enemy.x, enemy.y, enemy.w, enemy.h);
@@ -1348,411 +2145,189 @@
                 }
             }
 
-            // --- Função para desenhar power-ups ---
-            function drawPowerup(pu) {
-                if (pu.type === 'mushroom' && mushroomLoaded) {
-                    ctx.drawImage(mushroomImg, pu.x, pu.y, pu.w, pu.h);
-                } else if (pu.type === 'star' && starLoaded) {
+            // Boss
+            drawBoss();
+
+            // Bandeira
+            ctx.fillStyle = '#4a7a3a';
+            ctx.fillRect(flag.x + 8, flag.y, 4, flag.h);
+            ctx.fillStyle = currentLevel === 10 ? '#FFD700' : '#f44336';
+            ctx.shadowColor = currentLevel === 10 ? '#FFD700' : '#f44336';
+            ctx.shadowBlur = currentLevel === 10 ? 20 : 5;
+            ctx.beginPath();
+            ctx.moveTo(flag.x + 12, flag.y);
+            ctx.lineTo(flag.x + 12, flag.y + 30);
+            ctx.lineTo(flag.x + 40, flag.y + 15);
+            ctx.closePath();
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Player
+            if (player.invincible > 0 && player.invincible % 6 < 3) {
+                // Piscar
+            } else {
+                const color = player.hasStar ? '#ffd700' : (player.hasMushroom ? '#ff6b35' : charStats.color1);
+                ctx.shadowColor = player.hasStar ? '#ffd700' : 'transparent';
+                ctx.shadowBlur = player.hasStar ? 30 : 0;
+                
+                // Corpo
+                ctx.fillStyle = color;
+                ctx.fillRect(player.x, player.y + 10, player.w, player.h - 10);
+                
+                // Cabeça
+                ctx.fillStyle = player.hasStar ? '#fff' : charStats.skin;
+                ctx.fillRect(player.x + 4, player.y, player.w - 8, 14);
+                
+                // Chapéu
+                ctx.fillStyle = color;
+                ctx.fillRect(player.x + 2, player.y - 4, player.w - 4, 8);
+                
+                // Olhos
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(player.x + (player.facing > 0 ? 18 : 6), player.y + 4, 6, 6);
+                ctx.fillStyle = '#000';
+                ctx.fillRect(player.x + (player.facing > 0 ? 20 : 8), player.y + 6, 3, 3);
+                
+                // Pernas
+                ctx.fillStyle = '#4e342e';
+                ctx.fillRect(player.x + 2, player.y + player.h - 4, 10, 4);
+                ctx.fillRect(player.x + player.w - 12, player.y + player.h - 4, 10, 4);
+                
+                ctx.shadowBlur = 0;
+                
+                // Power-up ícones
+                if (player.hasStar) {
+                    ctx.fillStyle = '#ffd700';
                     ctx.shadowColor = '#ffd700';
                     ctx.shadowBlur = 20;
-                    ctx.drawImage(starImg, pu.x, pu.y, pu.w, pu.h);
+                    ctx.font = '16px "Courier New"';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('⭐', player.x + player.w/2, player.y - 8);
                     ctx.shadowBlur = 0;
-                } else {
-                    ctx.fillStyle = pu.type === 'mushroom' ? '#ff6b35' : '#ffd700';
-                    ctx.fillRect(pu.x, pu.y, pu.w, pu.h);
-                    ctx.fillStyle = '#fff';
-                    ctx.font = '20px "Courier New"';
+                } else if (player.hasMushroom) {
+                    ctx.fillStyle = '#ff6b35';
+                    ctx.font = '14px "Courier New"';
+                    ctx.textAlign = 'center';
+                    ctx.fillText('🍄', player.x + player.w/2, player.y - 6);
+                }
+            }
+
+            // Game Over / Win
+            if (gameOver) {
+                ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                ctx.fillRect(0, 0, 800, 400);
+                ctx.fillStyle = '#ff6b6b';
+                ctx.shadowColor = '#ff6b6b';
+                ctx.shadowBlur = 30;
+                ctx.font = 'bold 48px "Courier New"';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('💀 GAME OVER', 400, 160);
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = '#fff';
+                ctx.font = '20px "Courier New"';
+                ctx.fillText('Clique em "Reiniciar" para jogar novamente', 400, 220);
+                ctx.fillStyle = '#b6d4ff';
+                ctx.font = '16px "Courier New"';
+                ctx.fillText(`Pontuação: ${score}`, 400, 270);
+            }
+
+            if (win) {
+                ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                ctx.fillRect(0, 0, 800, 400);
+                
+                if (currentLevel === MAX_LEVEL) {
+                    // Vitória final - contra Bowser
+                    ctx.fillStyle = '#FFD700';
+                    ctx.shadowColor = '#FFD700';
+                    ctx.shadowBlur = 40;
+                    ctx.font = 'bold 48px "Courier New"';
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText(pu.type === 'mushroom' ? '🍄' : '⭐', pu.x + pu.w/2, pu.y + pu.h/2);
-                }
-            }
-
-            // --- Carregar Fase ---
-            function loadLevel(level) {
-                bossDefeated = false;
-                bossActive = false;
-                boss = null;
-                player.x = 60;
-                player.y = GROUND_Y - player.h;
-                player.vy = 0;
-                player.onGround = false;
-                player.invincible = 0;
-                if (!player.hasStar) {
-                    player.hasMushroom = false;
-                    player.bigMode = false;
-                    applyCharStats();
-                }
-                flag.x = 760;
-                powerups = [];
-
-                platforms = [{ x: 0, y: GROUND_Y, w: 800, h: 12, type: 'ground' }];
-                coinObjects = [];
-                enemies = [];
-
-                if (level === 1) {
-                    platforms.push({ x: 150, y: 280, w: 80, h: 18, type: 'brick' });
-                    platforms.push({ x: 320, y: 220, w: 80, h: 18, type: 'brick' });
-                    platforms.push({ x: 500, y: 280, w: 80, h: 18, type: 'brick' });
-                    platforms.push({ x: 650, y: 220, w: 80, h: 18, type: 'brick' });
-                    platforms.push({ x: 400, y: 140, w: 32, h: 32, type: 'question', hasCoin: true });
-                    
-                    coinObjects = [
-                        { x: 190, y: 250, w: 18, h: 18, collected: false },
-                        { x: 360, y: 190, w: 18, h: 18, collected: false },
-                        { x: 540, y: 250, w: 18, h: 18, collected: false },
-                        { x: 690, y: 190, w: 18, h: 18, collected: false },
-                    ];
-                    
-                    enemies = [
-                        { x: 250, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.2, active: true, type: 'goomba' },
-                        { x: 450, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.0, active: true, type: 'goomba' },
-                    ];
-                    
-                    powerups = [
-                        { x: 180, y: 250, w: 24, h: 24, type: 'mushroom', active: true },
-                        { x: 550, y: 250, w: 24, h: 24, type: 'star', active: true },
-                    ];
-
-                } else if (level === 2) {
-                    platforms.push({ x: 100, y: 290, w: 70, h: 18, type: 'brick' });
-                    platforms.push({ x: 240, y: 230, w: 70, h: 18, type: 'brick' });
-                    platforms.push({ x: 380, y: 180, w: 70, h: 18, type: 'brick' });
-                    platforms.push({ x: 520, y: 240, w: 70, h: 18, type: 'brick' });
-                    platforms.push({ x: 660, y: 190, w: 70, h: 18, type: 'brick' });
-                    platforms.push({ x: 350, y: 120, w: 32, h: 32, type: 'question', hasCoin: true });
-                    
-                    coinObjects = [
-                        { x: 140, y: 260, w: 18, h: 18, collected: false },
-                        { x: 280, y: 200, w: 18, h: 18, collected: false },
-                        { x: 420, y: 150, w: 18, h: 18, collected: false },
-                        { x: 560, y: 210, w: 18, h: 18, collected: false },
-                        { x: 700, y: 160, w: 18, h: 18, collected: false },
-                    ];
-                    
-                    enemies = [
-                        { x: 180, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.5, active: true, type: 'goomba' },
-                        { x: 400, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.2, active: true, type: 'goomba' },
-                        { x: 600, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.8, active: true, type: 'goomba' },
-                    ];
-                    
-                    powerups = [
-                        { x: 280, y: 200, w: 24, h: 24, type: 'mushroom', active: true },
-                        { x: 560, y: 210, w: 24, h: 24, type: 'star', active: true },
-                        { x: 140, y: 260, w: 24, h: 24, type: 'mushroom', active: true },
-                    ];
-
-                } else if (level === 3) {
-                    platforms.push({ x: 80, y: 290, w: 70, h: 18, type: 'brick' });
-                    platforms.push({ x: 210, y: 230, w: 70, h: 18, type: 'brick' });
-                    platforms.push({ x: 340, y: 170, w: 70, h: 18, type: 'brick' });
-                    platforms.push({ x: 470, y: 230, w: 70, h: 18, type: 'brick' });
-                    platforms.push({ x: 600, y: 170, w: 70, h: 18, type: 'brick' });
-                    platforms.push({ x: 300, y: 110, w: 32, h: 32, type: 'question', hasCoin: true });
-                    
-                    coinObjects = [
-                        { x: 120, y: 260, w: 18, h: 18, collected: false },
-                        { x: 250, y: 200, w: 18, h: 18, collected: false },
-                        { x: 380, y: 140, w: 18, h: 18, collected: false },
-                        { x: 510, y: 200, w: 18, h: 18, collected: false },
-                        { x: 640, y: 140, w: 18, h: 18, collected: false },
-                    ];
-                    
-                    enemies = [
-                        { x: 150, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.5, active: true, type: 'goomba' },
-                        { x: 500, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.5, active: true, type: 'goomba' },
-                    ];
-                    
-                    powerups = [
-                        { x: 250, y: 200, w: 24, h: 24, type: 'star', active: true },
-                        { x: 510, y: 200, w: 24, h: 24, type: 'mushroom', active: true },
-                    ];
-                    
-                    boss = {
-                        x: 720,
-                        y: GROUND_Y - 64,
-                        w: 48,
-                        h: 64,
-                        vx: -1.8,
-                        active: true,
-                        hp: 3,
-                        maxHp: 3,
-                        hitCooldown: 0,
-                        type: 'boss'
-                    };
-                    bossActive = true;
-                    flag.x = 780;
-
-                } else if (level === 4) {
-                    platforms.push({ x: 60, y: 300, w: 60, h: 18, type: 'brick' });
-                    platforms.push({ x: 180, y: 240, w: 60, h: 18, type: 'brick' });
-                    platforms.push({ x: 300, y: 180, w: 60, h: 18, type: 'brick' });
-                    platforms.push({ x: 420, y: 240, w: 60, h: 18, type: 'brick' });
-                    platforms.push({ x: 540, y: 180, w: 60, h: 18, type: 'brick' });
-                    platforms.push({ x: 660, y: 240, w: 60, h: 18, type: 'brick' });
-                    platforms.push({ x: 200, y: 120, w: 32, h: 32, type: 'question', hasCoin: true });
-                    platforms.push({ x: 500, y: 120, w: 32, h: 32, type: 'question', hasCoin: true });
-                    
-                    coinObjects = [
-                        { x: 100, y: 270, w: 18, h: 18, collected: false },
-                        { x: 220, y: 210, w: 18, h: 18, collected: false },
-                        { x: 340, y: 150, w: 18, h: 18, collected: false },
-                        { x: 460, y: 210, w: 18, h: 18, collected: false },
-                        { x: 580, y: 150, w: 18, h: 18, collected: false },
-                        { x: 700, y: 210, w: 18, h: 18, collected: false },
-                    ];
-                    
-                    enemies = [
-                        { x: 120, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.2, active: true, type: 'goomba' },
-                        { x: 350, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.3, active: true, type: 'goomba' },
-                        { x: 580, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.6, active: true, type: 'goomba' },
-                    ];
-                    
-                    powerups = [
-                        { x: 220, y: 210, w: 24, h: 24, type: 'mushroom', active: true },
-                        { x: 460, y: 210, w: 24, h: 24, type: 'star', active: true },
-                        { x: 580, y: 150, w: 24, h: 24, type: 'mushroom', active: true },
-                    ];
-                    
-                    boss = {
-                        x: 720,
-                        y: GROUND_Y - 64,
-                        w: 48,
-                        h: 64,
-                        vx: -2.0,
-                        active: true,
-                        hp: 4,
-                        maxHp: 4,
-                        hitCooldown: 0,
-                        type: 'boss'
-                    };
-                    bossActive = true;
-                    flag.x = 780;
-
-                } else if (level === 5) {
-                    platforms.push({ x: 50, y: 300, w: 60, h: 18, type: 'brick' });
-                    platforms.push({ x: 160, y: 250, w: 60, h: 18, type: 'brick' });
-                    platforms.push({ x: 270, y: 190, w: 60, h: 18, type: 'brick' });
-                    platforms.push({ x: 380, y: 130, w: 60, h: 18, type: 'brick' });
-                    platforms.push({ x: 490, y: 190, w: 60, h: 18, type: 'brick' });
-                    platforms.push({ x: 600, y: 250, w: 60, h: 18, type: 'brick' });
-                    platforms.push({ x: 710, y: 190, w: 60, h: 18, type: 'brick' });
-                    platforms.push({ x: 150, y: 90, w: 32, h: 32, type: 'question', hasCoin: true });
-                    platforms.push({ x: 450, y: 80, w: 32, h: 32, type: 'question', hasCoin: true });
-                    
-                    coinObjects = [
-                        { x: 90, y: 270, w: 18, h: 18, collected: false },
-                        { x: 200, y: 220, w: 18, h: 18, collected: false },
-                        { x: 310, y: 160, w: 18, h: 18, collected: false },
-                        { x: 420, y: 100, w: 18, h: 18, collected: false },
-                        { x: 530, y: 160, w: 18, h: 18, collected: false },
-                        { x: 640, y: 220, w: 18, h: 18, collected: false },
-                        { x: 750, y: 160, w: 18, h: 18, collected: false },
-                    ];
-                    
-                    enemies = [
-                        { x: 100, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.8, active: true, type: 'goomba' },
-                        { x: 300, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.5, active: true, type: 'goomba' },
-                        { x: 500, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.4, active: true, type: 'goomba' },
-                        { x: 680, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.7, active: true, type: 'goomba' },
-                    ];
-                    
-                    powerups = [
-                        { x: 200, y: 220, w: 24, h: 24, type: 'star', active: true },
-                        { x: 420, y: 100, w: 24, h: 24, type: 'mushroom', active: true },
-                        { x: 640, y: 220, w: 24, h: 24, type: 'star', active: true },
-                        { x: 310, y: 160, w: 24, h: 24, type: 'mushroom', active: true },
-                    ];
-                    
-                    boss = {
-                        x: 720,
-                        y: GROUND_Y - 64,
-                        w: 48,
-                        h: 64,
-                        vx: -2.2,
-                        active: true,
-                        hp: 5,
-                        maxHp: 5,
-                        hitCooldown: 0,
-                        type: 'boss'
-                    };
-                    bossActive = true;
-                    flag.x = 780;
-
-                } else if (level === 6) {
-                    platforms.push({ x: 30, y: 300, w: 50, h: 18, type: 'brick' });
-                    platforms.push({ x: 130, y: 250, w: 50, h: 18, type: 'brick' });
-                    platforms.push({ x: 230, y: 190, w: 50, h: 18, type: 'brick' });
-                    platforms.push({ x: 330, y: 130, w: 50, h: 18, type: 'brick' });
-                    platforms.push({ x: 430, y: 190, w: 50, h: 18, type: 'brick' });
-                    platforms.push({ x: 530, y: 250, w: 50, h: 18, type: 'brick' });
-                    platforms.push({ x: 630, y: 190, w: 50, h: 18, type: 'brick' });
-                    platforms.push({ x: 730, y: 130, w: 50, h: 18, type: 'brick' });
-                    platforms.push({ x: 100, y: 80, w: 32, h: 32, type: 'question', hasCoin: true });
-                    platforms.push({ x: 350, y: 70, w: 32, h: 32, type: 'question', hasCoin: true });
-                    platforms.push({ x: 600, y: 80, w: 32, h: 32, type: 'question', hasCoin: true });
-                    
-                    coinObjects = [
-                        { x: 70, y: 270, w: 18, h: 18, collected: false },
-                        { x: 170, y: 220, w: 18, h: 18, collected: false },
-                        { x: 270, y: 160, w: 18, h: 18, collected: false },
-                        { x: 370, y: 100, w: 18, h: 18, collected: false },
-                        { x: 470, y: 160, w: 18, h: 18, collected: false },
-                        { x: 570, y: 220, w: 18, h: 18, collected: false },
-                        { x: 670, y: 160, w: 18, h: 18, collected: false },
-                        { x: 770, y: 100, w: 18, h: 18, collected: false },
-                    ];
-                    
-                    enemies = [
-                        { x: 80, y: GROUND_Y - 28, w: 28, h: 28, vx: -2.0, active: true, type: 'goomba' },
-                        { x: 250, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.8, active: true, type: 'goomba' },
-                        { x: 420, y: GROUND_Y - 28, w: 28, h: 28, vx: -2.2, active: true, type: 'goomba' },
-                        { x: 590, y: GROUND_Y - 28, w: 28, h: 28, vx: 1.6, active: true, type: 'goomba' },
-                        { x: 720, y: GROUND_Y - 28, w: 28, h: 28, vx: -1.9, active: true, type: 'goomba' },
-                    ];
-                    
-                    powerups = [
-                        { x: 170, y: 220, w: 24, h: 24, type: 'mushroom', active: true },
-                        { x: 370, y: 100, w: 24, h: 24, type: 'star', active: true },
-                        { x: 570, y: 220, w: 24, h: 24, type: 'mushroom', active: true },
-                        { x: 670, y: 160, w: 24, h: 24, type: 'star', active: true },
-                        { x: 270, y: 160, w: 24, h: 24, type: 'mushroom', active: true },
-                    ];
-                    
-                    boss = {
-                        x: 720,
-                        y: GROUND_Y - 64,
-                        w: 48,
-                        h: 64,
-                        vx: -2.5,
-                        active: true,
-                        hp: 6,
-                        maxHp: 6,
-                        hitCooldown: 0,
-                        type: 'boss'
-                    };
-                    bossActive = true;
-                    flag.x = 780;
-                }
-
-                levelSpan.textContent = level;
-                updateDisplay();
-                updatePowerBadge();
-            }
-
-            // --- Reset Completo ---
-            function resetGame() {
-                gameOver = false;
-                win = false;
-                score = 0;
-                coins = 0;
-                currentLevel = 1;
-                player.hasMushroom = false;
-                player.hasStar = false;
-                player.bigMode = false;
-                player.starTimer = 0;
-                applyCharStats();
-                loadLevel(currentLevel);
-                updateDisplay();
-                updatePowerBadge();
-            }
-
-            // --- Avançar Fase ---
-            function nextLevel() {
-                if (currentLevel < MAX_LEVEL) {
-                    currentLevel++;
-                    loadLevel(currentLevel);
-                    win = false;
-                    gameOver = false;
-                    bossDefeated = false;
+                    ctx.fillText('🏆 VOCÊ VENCEU!', 400, 140);
+                    ctx.shadowBlur = 0;
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '24px "Courier New"';
+                    ctx.fillText('🎉 BOWSER FOI DERROTADO!', 400, 200);
+                    ctx.fillStyle = '#FFD700';
+                    ctx.font = '20px "Courier New"';
+                    ctx.fillText(`⭐ Pontuação final: ${score} ⭐`, 400, 250);
+                    ctx.fillStyle = '#b6d4ff';
+                    ctx.font = '18px "Courier New"';
+                    ctx.fillText('Parabéns! Você salvou o Reino dos Cogumelos!', 400, 300);
                 } else {
-                    win = true;
+                    ctx.fillStyle = '#ffd700';
+                    ctx.shadowColor = '#ffd700';
+                    ctx.shadowBlur = 30;
+                    ctx.font = 'bold 48px "Courier New"';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText('🎉 FASE COMPLETA!', 400, 150);
+                    ctx.shadowBlur = 0;
+                    ctx.fillStyle = '#fff';
+                    ctx.font = '24px "Courier New"';
+                    ctx.fillText(`Próxima fase: ${currentLevel + 1}/10`, 400, 210);
+                    ctx.fillStyle = '#ffd700';
+                    ctx.font = '20px "Courier New"';
+                    ctx.fillText(`Pontuação: ${score}`, 400, 260);
+                    ctx.fillStyle = '#b6d4ff';
+                    ctx.font = '16px "Courier New"';
+                    ctx.fillText('Pressione ESPAÇO para continuar', 400, 310);
                 }
             }
+        }
 
-            // --- Atualizar badge de power-up ---
-            function updatePowerBadge() {
-                if (player.hasStar) {
-                    powerBadge.textContent = '⭐ ESTRELA ATIVA!';
-                    powerBadge.className = 'power-badge active';
-                    powerBadge.style.background = '#ffd700';
-                    powerBadge.style.color = '#1d2f4a';
-                } else if (player.hasMushroom) {
-                    powerBadge.textContent = '🍄 SUPER COGUMELO';
-                    powerBadge.className = 'power-badge active';
-                    powerBadge.style.background = '#ff6b35';
-                    powerBadge.style.color = '#fff';
-                } else {
-                    powerBadge.className = 'power-badge';
+        // roundRect polyfill para canvas
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+                if (r > w/2) r = w/2;
+                if (r > h/2) r = h/2;
+                this.moveTo(x + r, y);
+                this.arcTo(x + w, y, x + w, y + h, r);
+                this.arcTo(x + w, y + h, x, y + h, r);
+                this.arcTo(x, y + h, x, y, r);
+                this.arcTo(x, y, x + w, y, r);
+                return this;
+            };
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Tecla Espaço para continuar
+        window.addEventListener('keydown', function(e) {
+            if (e.key === ' ' || e.key === 'Space') {
+                e.preventDefault();
+                if (win) {
+                    if (currentLevel === MAX_LEVEL) {
+                        resetGame();
+                    } else {
+                        nextLevel();
+                    }
                 }
             }
+        });
 
-            // --- Update ---
-            function update() {
-                if (gameOver || win) return;
+        // Inicializar com usuário padrão para teste
+        if (!localStorage.getItem('marioUsers')) {
+            const defaultUsers = {
+                'admin': '1234',
+                'mario': 'mario',
+                'teste': '123'
+            };
+            saveUsers(defaultUsers);
+        }
 
-                if (player.hasStar) {
-                    player.starTimer--;
-                    if (player.starTimer <= 0) {
-                        player.hasStar = false;
-                        player.starTimer = 0;
-                        updatePowerBadge();
-                    }
-                }
-
-                if (player.invincible > 0) player.invincible--;
-
-                const speed = player.hasStar ? charStats.speed * 1.5 : charStats.speed;
-                if (keys.left) {
-                    player.x -= speed;
-                    player.facing = -1;
-                }
-                if (keys.right) {
-                    player.x += speed;
-                    player.facing = 1;
-                }
-                if (player.x < 0) player.x = 0;
-                if (player.x + player.w > 800) player.x = 800 - player.w;
-
-                player.vy += GRAVITY;
-                player.y += player.vy;
-
-                player.onGround = false;
-                for (let p of platforms) {
-                    if (player.vy >= 0 && rectCollide(player, p)) {
-                        player.y = p.y - player.h;
-                        player.vy = 0;
-                        player.onGround = true;
-                    }
-                    if (p.type === 'question' && p.hasCoin && rectCollide(player, p)) {
-                        p.hasCoin = false;
-                        coins++;
-                        score += 50;
-                        updateDisplay();
-                    }
-                }
-
-                for (let coin of coinObjects) {
-                    if (!coin.collected && rectCollide(player, coin)) {
-                        coin.collected = true;
-                        coins++;
-                        score += 30;
-                        updateDisplay();
-                    }
-                }
-
-                for (let pu of powerups) {
-                    if (!pu.active) continue;
-                    if (rectCollide(player, pu)) {
-                        pu.active = false;
-                        if (pu.type === 'mushroom') {
-                            player.hasMushroom = true;
-                            player.bigMode = true;
-                            applyCharStats();
-                            score += 100;
-                            updateDisplay();
-                            updatePowerBadge();
-                        } else if (pu.type === 'star') {
-                            player.hasStar = true;
-                            player.starTimer = 300;
-                            player.invincible = 300
+        console.log('✅ Jogo carregado!');
+        console.log('🎮 Fases:');
+        console.log('📌 1-6: Fases normais');
+        console.log('👹 7: Larry Koopa');
+        console.log('👹 8: Morton Koopa Jr');
+        console.log('👹 9: Bowser Jr');
+        console.log('👑 10: BOWSER (Final)');
+    </script>
+</body>
+</html>
